@@ -13,11 +13,11 @@
 	],
 	"repositories": [
         {
-            "type": "vcs",
+            "type": "git",
             "url": "http://jiri:xBCFKq7a-@git.urbitech.cz:3000/URBITECH/urbitech-forms.git"
 		},
         {
-            "type": "vcs",
+            "type": "git",
             "url": "http://jiri:xBCFKq7a-@git.urbitech.cz:3000/URBITECH/urbitech-utils.git"
         }
     ],
