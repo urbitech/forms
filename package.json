@@ -1,0 +1,12 @@
+{
+  "name": "urbitech-forms",
+  "version": "2.4.0",
+  "description": "Urbitech Form component",
+  "homepage": "https://urbitech.cz",
+  "author": "Urbitech s.r.o. (https://urbitech.cz)",
+  "license": "BSD-3-Clause",
+  "main": "src/js/addressWhisperer.js",
+  "files": [
+    "src/assets"
+  ]
+}
