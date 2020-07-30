@@ -13,13 +13,13 @@
 	],
 	"repositories": [
         {
-            "type": "path",
-            "url": "../urbitech-forms"
+            "type": "vcs",
+            "url": "http://git.urbitech.cz:3000/URBITECH/urbitech-forms.git"			
 		},
         {
-            "type": "path",
-            "url": "../urbitech-utils"
-        }		
+            "type": "vcs",
+            "url": "http://git.urbitech.cz:3000/URBITECH/urbitech-utils.git"
+        }
     ],
 	"require": {
 		"php": ">=5.6.0",
