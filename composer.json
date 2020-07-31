@@ -21,6 +21,9 @@
             "url": "http://git.urbitech.cz:3000/URBITECH/urbitech-utils.git"
         }
 	],
+	"autoload": {
+		"classmap": ["src/"]
+	},	
 	"minimum-stability": "stable",
 	"require": {
 		"php": ">=5.6.0",
