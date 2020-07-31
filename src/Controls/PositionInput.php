@@ -98,7 +98,8 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl{
 					'name' => $name.'[mapAddressLat]',
 					'value' => $this->lat,
 					'class' => $name.'[mapAddressLat] form-control',
-					'data-attr' => $name
+					'data-attr' => $name,
+					'readonly' => true
 				])->setAttribute('data-nette-rules', $rules)
 			)
 
@@ -108,8 +109,17 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl{
 					'name' => $name.'[mapAddressLon]',
 					'value' => $this->lon,
 					'class' => $name.'[mapAddressLon] form-control',
-					'data-attr' => $name
+					'data-attr' => $name,
+					'readonly' => true
 				])->setAttribute('data-nette-rules', $rules)
+			)
+
+			.Html::el('div')->setClass('col-sm-12')->setHtml(
+				Html::el('div',[
+					'id' => $name.'-markerDestroy',
+					'class' => 'markerDestroy',
+					'data-map-container' => $name,
+				])->setText('Smaž puntik')
 			)
 
 			.Html::el('div')->setClass('col-sm-12')->setHtml(
@@ -118,7 +128,8 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl{
 					'class' => 'mapInit',
 					'data-map-container' => $name
 				])
-			);
+			)
+			;
 
 
 		return Html::el('div')->setClass('row')

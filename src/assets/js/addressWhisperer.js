@@ -33,9 +33,10 @@ for (let i = 0; i < mapElement.length; i++) {
 	map[mainContainer].on('click', function(ev) {
 		
 		let lat = ev.latlng.lat;
-		let lon = ev.latlng.lng;
-		
-		marker[mainContainer].setLatLng([lat, lon]);
+		let lon = ev.latlng.lng;		
+
+		// KDYŽ MAPA NEMÁ MARKER, TAK SE VLOŽÍ, JINAK SE POSUNE
+		(!map[mainContainer].hasLayer(marker[mainContainer])) ? marker[mainContainer] = L.marker([lat, lon]).addTo(map[mainContainer]) : marker[mainContainer].setLatLng([lat, lon]);
 		
 		getReverseDataFromOSM(lat, lon, mainContainer, linkedContainer);
 		
@@ -53,6 +54,13 @@ for (let i = 0; i < mapElement.length; i++) {
 
 	});	
 
+	// EVENTHANDLER PRO ODSTRANĚNÍ MARKERU Z MAPY PO KLIKU NA TLAČÍTKO
+	let destroyMarkerButton = mainContainer + "-markerDestroy";
+	document.getElementById(destroyMarkerButton).addEventListener('click', event => {
+
+		map[mainContainer].removeLayer(marker[mainContainer]);
+
+	});
 }
 
 /* ------------ FETCH PO KLIKU DO MAPY ------------ */

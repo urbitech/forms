@@ -21,7 +21,7 @@
             "url": "http://git.urbitech.cz:3000/URBITECH/urbitech-utils.git"
         }
 	],
-	"minimum-stability": "dev",
+	"minimum-stability": "stable",
 	"require": {
 		"php": ">=5.6.0",
 		"nette/forms": "^2.4",
