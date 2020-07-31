@@ -14,13 +14,14 @@
 	"repositories": [
         {
             "type": "git",
-            "url": "http://jiri:xBCFKq7a-@git.urbitech.cz:3000/URBITECH/urbitech-forms.git"
+            "url": "http://git.urbitech.cz:3000/URBITECH/urbitech-forms.git"
 		},
         {
             "type": "git",
-            "url": "http://jiri:xBCFKq7a-@git.urbitech.cz:3000/URBITECH/urbitech-utils.git"
+            "url": "http://git.urbitech.cz:3000/URBITECH/urbitech-utils.git"
         }
-    ],
+	],
+	"minimum-stability": "dev",
 	"require": {
 		"php": ">=5.6.0",
 		"nette/forms": "^2.4",
