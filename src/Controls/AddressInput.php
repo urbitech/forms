@@ -71,8 +71,8 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl{
 
 		$name = $this->getHtmlName();
 		$placeholders = $this->getOption('placeholder');
+		$nameContainer = $this->getOption("controls-id") . '-container';
 
-		//$rules = Helpers::exportRules($this->getRules()) ?: NULL;
 		$rules = $this->modifyRulesControl(Helpers::exportRules($this->getRules())) ?: NULL;
 
 		$el = Html::el('div')->setClass('col-sm-12')->setHtml(
@@ -82,8 +82,8 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl{
 					'name' => $name . '[streetNumber]',
 					'value' => $this->streetNumber,
 					'placeholder' => isset($placeholders[0]) ? $this->translate($placeholders[0]) : NULL,
-					'class' => $name.'[streetNumber] form-control',
-					'data-block-id' => $name
+					'class' => $nameContainer.'[streetNumber] form-control',
+					'data-block-id' => $nameContainer
 				])->setId($this->getHtmlId())->setAttribute('data-nette-rules', $rules)
 
 			)
@@ -97,15 +97,15 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl{
 						'name' => $name . '[city]',
 						'value' => $this->city,
 						'placeholder' => isset($placeholders[1]) ? $this->translate($placeholders[1]) : NULL,
-						'class' => $name.'[city] form-control',
-						'data-whisperer-list' => $name.'[whispererListCity]',
-						'data-block-id' => $name,
+						'class' => $nameContainer.'[city] form-control',
+						'data-whisperer-list' => $nameContainer.'[whispererListCity]',
+						'data-block-id' => $nameContainer,
 						'autocomplete' => 'off'
 					])->setAttribute('data-nette-rules', $rules)
 					.Html::el('ul', [
-						'class' => $name.'[whispererListCity] whispererList',
-						'data-parent-input'=> $name."[city]",
-						'data-block-id' => $name
+						'class' => $nameContainer.'[whispererListCity] whispererList',
+						'data-parent-input'=> $nameContainer."[city]",
+						'data-block-id' => $nameContainer
 					])
 
 				)
@@ -120,15 +120,15 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl{
 						'name' => $name . '[postCode]',
 						'value' => $this->postCode,
 						'placeholder' => isset($placeholders[2]) ? $this->translate($placeholders[2]) : NULL,
-						'class' => $name. '[postCode] form-control',
-						'data-whisperer-list' => $name.'[whispererListPostCode]',
-						'data-block-id' => $name,
+						'class' => $nameContainer. '[postCode] form-control',
+						'data-whisperer-list' => $nameContainer.'[whispererListPostCode]',
+						'data-block-id' => $nameContainer,
 						'autocomplete' => 'off'
 						])->setAttribute('data-nette-rules', $rules)
 					.Html::el('ul', [
-						'class' => $name.'[whispererListPostCode] whispererList',
-						'data-parent-input'=> $name."[postCode]",
-						'data-block-id' => $name							
+						'class' => $nameContainer.'[whispererListPostCode] whispererList',
+						'data-parent-input'=> $nameContainer."[postCode]",
+						'data-block-id' => $nameContainer							
 					])					
 
 					)
@@ -137,8 +137,8 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl{
 
 		return Html::el('div')->setClass('row')
 			->setHtml($el)
-			->setId($this->getOption("controls-id"))
-			->setAttribute('data-urbitech-form-address', 'addressWhisperer')
+			->setId($nameContainer)
+			//->setAttribute('data-urbitech-form-address', 'addressWhisperer')
 			->setAttribute('data-urbitech-form-position', $this->getOption("data-urbitech-form-position"))
 			->setAttribute('data-country', $this->getOption("data-country"))
 		;
