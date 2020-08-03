@@ -93,7 +93,7 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl{
 					)
 					.Html::el('p')->setClass('col-sm-4')->setHtml(
 						Html::el('span')
-						->setText($this->getOption('map-text-zipCode') ? $this->translate($this->getOption('map-text-zipCode')) : $this->translate('map.text.zipCode'))
+						->setText($this->getOption('map-text-postCode') ? $this->translate($this->getOption('map-text-postCode')) : $this->translate('map.text.postCode'))
 						.Html::el('span')->setClass($nameContainer.'[mapAddressPostCode]')
 					)
 					.Html::el('p')->setClass('col-sm-12')->setHtml(
