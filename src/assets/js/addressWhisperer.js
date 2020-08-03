@@ -5,29 +5,58 @@
 // NASTAVENÍ POČÁTEČNÍCH PARAMETRŮ
 let map = [];
 let marker = [];
-let lat = 49.8167003;
-let lon = 15.4749544;
-let zoom = 6;
+let basicLat = 49.8167003;
+let basicLon = 15.4749544;
+let zoom = 7;
 
 // INICIALIZACE MAPY
 let mapElement = document.getElementsByClassName("mapInit");
 
 for (let i = 0; i < mapElement.length; i++) {
 	
-	let initMap = mapElement[i].id;
+	let initMap = mapElement[i].id;	
+	
 	let mainContainer = document.getElementById(initMap).getAttribute("data-map-container");
 	let linkedContainer = document.getElementById(mainContainer).getAttribute("data-urbitech-form-address");
 
-	map[mainContainer] = L.map(initMap).setView([lat, lon], zoom);
-	marker[mainContainer] = L.marker([lat, lon]).addTo(map[mainContainer]);
-	
-	// ZÁKLADNÍ VRSTVA
-	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-		maxZoom: 18,
-		id: 'mapbox/streets-v11',
-		tileSize: 512,
-		zoomOffset: -1
-	}).addTo(map[mainContainer]);
+	// DEFAULTNÍ MAPA S POHLEDEM NA ČESKOU REPUBLIKU
+	map[mainContainer] = L.map(initMap).setView([basicLat, basicLon], zoom);
+
+	let lat = document.getElementsByClassName(mainContainer + "[mapAddressLat]")[0].value;
+	let lon = document.getElementsByClassName(mainContainer + "[mapAddressLon]")[0].value;
+
+	if(lat !== "" && lon !== ""){// KDYŽ DOSTANU POZICI ZE SERVERU DO INPTŮ
+
+		zoom = 17;
+		setMap(lat, lon, zoom, true)
+
+	} else {
+
+		let mapOptions = JSON.parse(document.getElementById(mainContainer+"-map").getAttribute("data-map-options"));
+
+		if(mapOptions.lat === basicLat && mapOptions.lon === basicLon){// KDYŽ JE ZADANÁ DEFAULTNÍ POZICE
+
+			zoom = 7;
+			setMap(mapOptions.lat, mapOptions.lon, zoom, false)
+
+		} else {// KDYŽ JE POZICE ZADANÁ NA BACKENDU URČNĚ V OPTIONS
+
+			zoom = 15;
+			setMap(mapOptions.lat, mapOptions.lon, zoom, true)
+
+		}
+
+	}
+
+	function setMap(lat, lon, zoom, isMarker){
+
+		map[mainContainer].setView([lat, lon], zoom);
+		(isMarker) ? marker[mainContainer] = L.marker([lat, lon]).addTo(map[mainContainer]) : false;
+
+		// ZÁKLADNÍ VRSTVA
+		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map[mainContainer]);		
+
+	}
 	
 	// ZJIŠTĚNÍ SOUŘADNIC PO KLIKNUTÍ DO MAPY A ZAVOLÁNÍ QUERY
 	map[mainContainer].on('click', function(ev) {
@@ -56,9 +85,15 @@ for (let i = 0; i < mapElement.length; i++) {
 
 	// EVENTHANDLER PRO ODSTRANĚNÍ MARKERU Z MAPY PO KLIKU NA TLAČÍTKO
 	let destroyMarkerButton = mainContainer + "-markerDestroy";
+
 	document.getElementById(destroyMarkerButton).addEventListener('click', event => {
 
+		event.preventDefault();
+
 		map[mainContainer].removeLayer(marker[mainContainer]);
+		document.getElementsByClassName(mainContainer + "[mapAddressLat]")[0].value = "";
+		document.getElementsByClassName(mainContainer + "[mapAddressLon]")[0].value = "";
+		
 
 	});
 }
@@ -136,9 +171,9 @@ function getDataFromOSM(mainElement){
 	let thisElement = document.getElementById(mainElement); // HLAVNÍ ELEMENT DO KTERÉHO SE PÍŠE
 	
 	// NASTAVENÍ HODNOT HLAVNÍCH PROMĚNNÝCH Z INPUT PRVKŮ
-	let streetNuber = document.querySelector('input[name="'+ mainElement +'[streetNumber]"]').value;
-	let cityInput = document.querySelector('input[name="'+ mainElement +'[city]"]').value;
-	let zipCodeInput = document.querySelector('input[name="'+ mainElement +'[postCode]"]').value;
+	let streetNuber = document.getElementsByClassName(mainElement +'[streetNumber]')[0].value;
+	let cityInput = document.getElementsByClassName(mainElement +'[city]')[0].value;
+	let zipCodeInput = document.getElementsByClassName(mainElement +'[postCode]')[0].value;
 	
 	// ZJIŠTĚNÍ ZEMĚ PRO OMEZENÍ VYHLEDÁVÁNÍ
 	let country = thisElement.getAttribute("data-country");
@@ -247,7 +282,7 @@ function getDataFromOSM(mainElement){
 				} // JINAK BY SE MAPA POSUNULA NA STŘED OBCE
 			});
 
-			let mapContainer = thisElement.getAttribute("data-urbitech-form-position");
+			let mapContainer = thisElement.getAttribute("data-urbitech-form-position") + "-container";
 			let lat = data[getIndex].lat;
 			let lon = data[getIndex].lon;
 
@@ -336,6 +371,7 @@ document.addEventListener("keyup", function (e) {
 Nette.validators.URBITECHFormsControlsAddressInput_validateAddress = function(elem, arg, value){
 
 	let parentElement = elem.getAttribute("data-block-id");
+	parentElement = parentElement.replace("-container", "");
 
 	if(value !== ""){// INPUT NESMÍ BÝT PRÁZDNÝ
 
