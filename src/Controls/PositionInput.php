@@ -6,6 +6,7 @@ use Nette\Forms\Container;
 use Nette\Forms\Form;
 use Nette\Utils\Html;
 use Nette\Forms\Helpers;
+use Nette\Utils\Json;
 use URBITECH\Utils\Position;
 use Nette\Utils\Validators;
 
@@ -15,6 +16,12 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl{
 	private	$lat = '';
 	
 	private $lon = '';
+
+	const DEFAULT_LAT = 49.8167003;
+	//const DEFAULT_LAT = 50;
+
+	const DEFAULT_LNG = 15.4749544;	
+	//const DEFAULT_LNG = 15;	
 
 
 	public function __construct($label = NULL)
@@ -66,27 +73,33 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl{
 	public function getControl(){
 
 		$name = $this->getHtmlName();
+		$nameContainer = $this->getOption("controls-id") . '-container';
 
-		$rules = Helpers::exportRules($this->getRules()) ?: NULL;
+		//$rules = Helpers::exportRules($this->getRules()) ?: NULL;
+		$rules = $this->modifyRulesControl(Helpers::exportRules($this->getRules())) ?: NULL;
 
 		$el = Html::el('div')->setClass('col-sm-12')->setHtml(
-				Html::el('div')->setClass($name.'[mapAddress] mapAddressFields row')->setHtml(
+				Html::el('div')->setClass($nameContainer.'[mapAddress] mapAddressFields row')->setHtml(
 
 					Html::el('p')->setClass('col-sm-4')->setHtml(
-						Html::el('span')->setText('Ulice:')
-						.Html::el('span')->setClass($name.'[mapAddressStreetNumber]')
+						Html::el('span')
+						->setText($this->getOption('map-text-streetNumber') ? $this->translate($this->getOption('map-text-streetNumber')) : $this->translate('map.text.streetNumber'))
+						.Html::el('span')->setClass($nameContainer.'[mapAddressStreetNumber]')
 					)
 					.Html::el('p')->setClass('col-sm-4')->setHtml(
-						Html::el('span')->setText('Obec:')
-						.Html::el('span')->setClass($name.'[mapAddressCity]')
+						Html::el('span')
+						->setText($this->getOption('map-text-city') ? $this->translate($this->getOption('map-text-city')) : $this->translate('map.text.city'))
+						.Html::el('span')->setClass($nameContainer.'[mapAddressCity]')
 					)
 					.Html::el('p')->setClass('col-sm-4')->setHtml(
-						Html::el('span')->setText('PSČ:')
-						.Html::el('span')->setClass($name.'[mapAddressPostCode]')
+						Html::el('span')
+						->setText($this->getOption('map-text-zipCode') ? $this->translate($this->getOption('map-text-zipCode')) : $this->translate('map.text.zipCode'))
+						.Html::el('span')->setClass($nameContainer.'[mapAddressPostCode]')
 					)
 					.Html::el('p')->setClass('col-sm-12')->setHtml(
-						Html::el('button')->setText('Použít:')
-							->setClass($name.'[mapAddressUse] mapAddressFields__button')
+						Html::el('button')
+						->setText($this->getOption('use-button-label') ? $this->translate($this->getOption('use-button-label')) : $this->translate('form.button.use'))
+							->setClass($nameContainer.'[mapAddressUse] mapAddressFields__button')
 					)
 
 				)
@@ -97,8 +110,7 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl{
 					'type' => 'text',
 					'name' => $name.'[mapAddressLat]',
 					'value' => $this->lat,
-					'class' => $name.'[mapAddressLat] form-control',
-					'data-attr' => $name,
+					'class' => $nameContainer.'[mapAddressLat] form-control',
 					'readonly' => true
 				])->setAttribute('data-nette-rules', $rules)
 			)
@@ -108,39 +120,60 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl{
 					'type' => 'text',
 					'name' => $name.'[mapAddressLon]',
 					'value' => $this->lon,
-					'class' => $name.'[mapAddressLon] form-control',
-					'data-attr' => $name,
+					'class' => $nameContainer.'[mapAddressLon] form-control',
 					'readonly' => true
 				])->setAttribute('data-nette-rules', $rules)
 			)
 
 			.Html::el('div')->setClass('col-sm-12')->setHtml(
-				Html::el('div',[
-					'id' => $name.'-markerDestroy',
-					'class' => 'markerDestroy',
-					'data-map-container' => $name,
-				])->setText('Smaž puntik')
-			)
+				Html::el('div')->setClass('map-box')->setHtml(
 
-			.Html::el('div')->setClass('col-sm-12')->setHtml(
-				Html::el('div',[
-					'id' => $name.'-map',
-					'class' => 'mapInit',
-					'data-map-container' => $name
-				])
-			)
-			;
+					Html::el('div',[
+						'id' => $nameContainer.'-map',
+						'class' => 'mapInit',
+						'data-map-container' => $nameContainer,
+						'data-map-options' => Json::encode([
+							'lat' => $this->getOption('map-lat') ?: self::DEFAULT_LAT,
+							'lon' => $this->getOption('map-lon') ?: self::DEFAULT_LNG,
+						])
+					])
+	
+					.Html::el('a',[
+						'id' => $nameContainer.'-markerDestroy',
+						'class' => 'markerDestroy',
+						'data-map-container' => $nameContainer,
+						'href' => '#'
+					])->setText('Smaž puntik')
+
+				)
+			);
 
 
 		return Html::el('div')->setClass('row')
 			->setHtml($el)
-			->setId($this->getOption("controls-id"))
-			->setAttribute('data-urbitech-form-position', 'mapPosition')
+			->setId($nameContainer)
+			//->setAttribute('data-urbitech-form-position', 'mapPosition')
 			->setAttribute('data-urbitech-form-address', $this->getOption("data-urbitech-form-address"))
-			->setAttribute('data-country', $this->getOption("data-country"))
-			;
+			->setAttribute('data-country', $this->getOption("data-country"));
 
 	}
+
+
+	private function modifyRulesControl($rules)
+	{
+
+		foreach ($rules as $key => $rule) {
+			if (isset($rule['control'])) {
+				$rules[$key]['control'] .= '[mapAddressLon]';
+			}
+
+			if (isset($rule['rules'])) {
+				$rules[$key]['rules'] = $this->modifyRulesControl($rule['rules']);
+			}
+		}
+
+		return $rules;
+	}	
 
 
 	/**
