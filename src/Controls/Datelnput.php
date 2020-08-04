@@ -84,7 +84,8 @@ class DateInput extends \Nette\Forms\Controls\BaseControl
 		$promptMonth = isset($placeholders[1]) ? ['' => $this->translate($placeholders[1])] : [];
 		
 		
-		$rules = Helpers::exportRules($this->getRules()) ?: NULL;
+		//$rules = Helpers::exportRules($this->getRules()) ?: NULL;
+		$rules = $this->modifyRulesControl(Helpers::exportRules($this->getRules())) ?: NULL;
 		
 		$input = Html::el('div')->setClass('col-md-4')->setHtml(
 			Helpers::createSelectBox(
@@ -113,6 +114,23 @@ class DateInput extends \Nette\Forms\Controls\BaseControl
 		
 		return Html::el('div')->setClass('row')
 				->setHtml($input);
+	}
+
+
+	private function modifyRulesControl($rules)
+	{
+
+		foreach ($rules as $key => $rule) {
+			if (isset($rule['control'])) {
+				$rules[$key]['control'] .= '[year]';
+			}
+
+			if (isset($rule['rules'])) {
+				$rules[$key]['rules'] = $this->modifyRulesControl($rule['rules']);
+			}
+		}
+
+		return $rules;
 	}
 
 
