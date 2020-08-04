@@ -17,7 +17,7 @@ for (let i = 0; i < mapElement.length; i++) {
 	let initMap = mapElement[i].id;	
 	
 	let mainContainer = document.getElementById(initMap).getAttribute("data-map-container");
-	let linkedContainer = document.getElementById(mainContainer).getAttribute("data-urbitech-form-address");
+	let linkedContainer = document.getElementById(mainContainer).getAttribute("data-urbitech-form-address") + "-container";
 
 	// DEFAULTNÍ MAPA S POHLEDEM NA ČESKOU REPUBLIKU
 	map[mainContainer] = L.map(initMap).setView([basicLat, basicLon], zoom);
@@ -54,7 +54,9 @@ for (let i = 0; i < mapElement.length; i++) {
 		(isMarker) ? marker[mainContainer] = L.marker([lat, lon]).addTo(map[mainContainer]) : false;
 
 		// ZÁKLADNÍ VRSTVA
-		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map[mainContainer]);		
+		L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png',{
+			attribution: 'Wikimedia maps | Map data &copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
+		}).addTo(map[mainContainer]);		
 
 	}
 	
@@ -130,7 +132,7 @@ function getReverseDataFromOSM(lat, lon, mainContainer, linkedContainer){
 		document.getElementsByClassName(mainContainer + "[mapAddressLat]")[0].value = data.lat;	
 		document.getElementsByClassName(mainContainer + "[mapAddressLon]")[0].value = data.lon;
 
-		if(linkedContainer !== null){// ZOBRAZENÍ TLAČÍTKA POUŽÍT, KDYŽ MÁME SPOJENÝ FORMULÁŘ
+		if(document.getElementById(linkedContainer) !== null){// ZOBRAZENÍ TLAČÍTKA POUŽÍT, KDYŽ MÁME SPOJENÝ FORMULÁŘ
 			document.getElementsByClassName(mainContainer + "[mapAddressUse]")[0].classList.add("mapAddressFields__button--active");
 		}
 		
