@@ -92,10 +92,13 @@ for (let i = 0; i < mapElement.length; i++) {
 
 		event.preventDefault();
 
-		map[mainContainer].removeLayer(marker[mainContainer]);
-		document.getElementsByClassName(mainContainer + "[mapAddressLat]")[0].value = "";
-		document.getElementsByClassName(mainContainer + "[mapAddressLon]")[0].value = "";
-		
+		if(marker[mainContainer] !== undefined){
+	
+			map[mainContainer].removeLayer(marker[mainContainer]);
+			document.getElementsByClassName(mainContainer + "[mapAddressLat]")[0].value = "";
+			document.getElementsByClassName(mainContainer + "[mapAddressLon]")[0].value = "";
+
+		}
 
 	});
 }
@@ -161,11 +164,16 @@ document.addEventListener('input', event => {
 	timeout = setTimeout(function () {// TIMEOUT ABY SE AKCE SPUSTILA AŽ UŽIVATEL DOPÍŠE
 		
 		let mainElement = event.target.getAttribute("data-block-id");
-		getDataFromOSM(mainElement);
+		if(mainElement !== null){
+
+			getDataFromOSM(mainElement);
+
+		}
 		
 	}, 750);
 
 });
+
 
 /* ------------ HLAVNÍ FUNKCE KTERÁ ZÍSKÁ DATA, VLOŽÍ JE DO NAŠEPTÁVAČŮ A POSUNE MAPU NA ZÍSKANÉ MÍSTO ------------ */
 function getDataFromOSM(mainElement){
@@ -216,7 +224,13 @@ function getDataFromOSM(mainElement){
 		if(data.length){
 
 			setDataToWhispererList(data); // VLOŽENÍ DAT DO NAŠEPTÁVAČŮ
-			chanmgeMapPosition(data); // POSUN MAPY NA MÍSTO
+
+			let mapContainer = thisElement.getAttribute("data-urbitech-form-position") + "-container";
+			if(document.getElementById(mapContainer) !== null){
+
+				chanmgeMapPosition(data, mapContainer); // POSUN MAPY NA MÍSTO
+
+			}
 
 		} else {
 
@@ -271,7 +285,7 @@ function getDataFromOSM(mainElement){
 	}
 
 	/* ------------ POSUNUTÍ MAP NA NAŠEPTANÉ MÍSTO ------------ */
-	function chanmgeMapPosition(data){
+	function chanmgeMapPosition(data, mapContainer){
 		
 		if(cityInput !== "" || zipCodeInput !== ""){ // POSUNUJEME AŽ KDYŽ MÁME ASPOŇ MĚSTO NEBO PSČ
 
@@ -284,12 +298,20 @@ function getDataFromOSM(mainElement){
 				} // JINAK BY SE MAPA POSUNULA NA STŘED OBCE
 			});
 
-			let mapContainer = thisElement.getAttribute("data-urbitech-form-position") + "-container";
 			let lat = data[getIndex].lat;
 			let lon = data[getIndex].lon;
 
 			map[mapContainer].setView([lat, lon], 18); // POSUNEME MAPU
-			marker[mapContainer].setLatLng([lat, lon]); // POSUNEME ŠIPKU
+
+			if(marker[mapContainer] === undefined){// KDYŽ NENÍ ŽÁDNÝ MARKER NA MAPĚ, TAK JEJ VYTVOŘÍME, JINAK HO POSUNEME¨
+
+				marker[mapContainer] = L.marker([lat, lon]).addTo(map[mapContainer]);
+
+			} else {
+
+				marker[mapContainer].setLatLng([lat, lon]);
+
+			}
 
 		}
 	}
