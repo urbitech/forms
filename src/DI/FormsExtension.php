@@ -15,6 +15,7 @@ final class FormsExtension extends CompilerExtension {
 		
 		$init->addBody('\URBITECH\Forms\Controls\AddressInput::register();');
 		$init->addBody('\URBITECH\Forms\Controls\PositionInput::register();');
+		$init->addBody('\URBITECH\Forms\Controls\DateInput::register();');
 		
 	}
 }

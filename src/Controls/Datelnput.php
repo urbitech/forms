@@ -4,8 +4,9 @@
  * Nette Forms date input
  */
 
-namespace Notifier\Forms\Controls;
+namespace URBITECH\Forms\Controls;
 
+use Nette\Forms\Container;
 use Nette\Forms\Form;
 use Nette\Utils\Html;
 use Nette\Forms\Helpers;
@@ -125,5 +126,13 @@ class DateInput extends \Nette\Forms\Controls\BaseControl
 			&& ctype_digit($control->year)
 			&& checkdate($control->month, $control->day, $control->year);
 	}
+
+
+	public static function register()
+	{
+		Container::extensionMethod('addDateInput', function(Container $container, $name, $label = NULL, $callback = NULL) {
+			return $container[$name] = new DateInput($label);
+		});
+	}		
 
 }
