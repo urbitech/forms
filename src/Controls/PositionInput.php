@@ -73,7 +73,7 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl{
 	public function getControl(){
 
 		$name = $this->getHtmlName();
-		$nameContainer = $this->getOption("controls-id") . '-container';
+		$nameContainer = ( $this->getOption("controls-id") ) ?: $name. '-container';
 
 		//$rules = Helpers::exportRules($this->getRules()) ?: NULL;
 		$rules = $this->modifyRulesControl(Helpers::exportRules($this->getRules())) ?: NULL;
@@ -81,22 +81,22 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl{
 		$el = Html::el('div')->setClass('col-sm-12')->setHtml(
 				Html::el('div')->setClass($nameContainer.'[mapAddress] mapAddressFields row')->setHtml(
 
-					Html::el('p')->setClass('col-sm-4')->setHtml(
+					Html::el('p')->setClass('col-sm-3')->setHtml(
 						Html::el('span')
-						->setText($this->getOption('map-text-streetNumber') ? $this->translate($this->getOption('map-text-streetNumber')) : $this->translate('map.text.streetNumber'))
+						->setText($this->getOption('map-text-streetNumber') ? $this->translate($this->getOption('map-text-streetNumber')) : $this->translate('form.map.streetNumber'))
 						.Html::el('span')->setClass($nameContainer.'[mapAddressStreetNumber]')
 					)
-					.Html::el('p')->setClass('col-sm-4')->setHtml(
+					.Html::el('p')->setClass('col-sm-3')->setHtml(
 						Html::el('span')
-						->setText($this->getOption('map-text-city') ? $this->translate($this->getOption('map-text-city')) : $this->translate('map.text.city'))
+						->setText($this->getOption('map-text-city') ? $this->translate($this->getOption('map-text-city')) : $this->translate('form.map.city'))
 						.Html::el('span')->setClass($nameContainer.'[mapAddressCity]')
 					)
-					.Html::el('p')->setClass('col-sm-4')->setHtml(
+					.Html::el('p')->setClass('col-sm-3')->setHtml(
 						Html::el('span')
-						->setText($this->getOption('map-text-postCode') ? $this->translate($this->getOption('map-text-postCode')) : $this->translate('map.text.postCode'))
+						->setText($this->getOption('map-text-postCode') ? $this->translate($this->getOption('map-text-postCode')) : $this->translate('form.map.postCode'))
 						.Html::el('span')->setClass($nameContainer.'[mapAddressPostCode]')
 					)
-					.Html::el('p')->setClass('col-sm-12')->setHtml(
+					.Html::el('p')->setClass('col-sm-3')->setHtml(
 						Html::el('button')
 						->setText($this->getOption('use-button-label') ? $this->translate($this->getOption('use-button-label')) : $this->translate('form.button.use'))
 							->setClass($nameContainer.'[mapAddressUse] mapAddressFields__button')
@@ -110,7 +110,7 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl{
 					'type' => 'text',
 					'name' => $name.'[mapAddressLat]',
 					'value' => $this->lat,
-					'class' => $nameContainer.'[mapAddressLat] form-control',
+					'class' => $nameContainer.'[mapAddressLat] form-control mapPositionInput',
 					'readonly' => true
 				])->setAttribute('data-nette-rules', $rules)
 			)
@@ -120,7 +120,7 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl{
 					'type' => 'text',
 					'name' => $name.'[mapAddressLon]',
 					'value' => $this->lon,
-					'class' => $nameContainer.'[mapAddressLon] form-control',
+					'class' => $nameContainer.'[mapAddressLon] form-control mapPositionInput',
 					'readonly' => true
 				])->setAttribute('data-nette-rules', $rules)
 			)
