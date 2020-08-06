@@ -82,6 +82,9 @@ Set custom container ID. If is unset, aplication use container name
 
 	->setOption("controls-id", "CUSTOM_ID")
 
+Other
+-----
+
 Less styles requires Bootstrap variables
 
 	@import "variables.less";
