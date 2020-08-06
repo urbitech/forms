@@ -71,7 +71,7 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl{
 
 		$name = $this->getHtmlName();
 		$placeholders = $this->getOption('placeholder');
-		$nameContainer = $this->getOption("controls-id") . '-container';
+		$nameContainer = ( $this->getOption("controls-id") ) ?: $name. '-container';
 
 		$rules = $this->modifyRulesControl(Helpers::exportRules($this->getRules())) ?: NULL;
 
@@ -82,7 +82,7 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl{
 					'name' => $name . '[streetNumber]',
 					'value' => $this->streetNumber,
 					'placeholder' => isset($placeholders[0]) ? $this->translate($placeholders[0]) : NULL,
-					'class' => $nameContainer.'[streetNumber] form-control',
+					'class' => $nameContainer.'[streetNumber] form-control formAddressInput',
 					'data-block-id' => $nameContainer
 				])->setId($this->getHtmlId())->setAttribute('data-nette-rules', $rules)
 
@@ -97,7 +97,7 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl{
 						'name' => $name . '[city]',
 						'value' => $this->city,
 						'placeholder' => isset($placeholders[1]) ? $this->translate($placeholders[1]) : NULL,
-						'class' => $nameContainer.'[city] form-control',
+						'class' => $nameContainer.'[city] form-control formAddressInput',
 						'data-whisperer-list' => $nameContainer.'[whispererListCity]',
 						'data-block-id' => $nameContainer,
 						'autocomplete' => 'off'
@@ -120,7 +120,7 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl{
 						'name' => $name . '[postCode]',
 						'value' => $this->postCode,
 						'placeholder' => isset($placeholders[2]) ? $this->translate($placeholders[2]) : NULL,
-						'class' => $nameContainer. '[postCode] form-control',
+						'class' => $nameContainer. '[postCode] form-control formAddressInput',
 						'data-whisperer-list' => $nameContainer.'[whispererListPostCode]',
 						'data-block-id' => $nameContainer,
 						'autocomplete' => 'off'
