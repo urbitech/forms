@@ -85,17 +85,17 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 
 				Html::el('p')->setClass('col-sm-3')->setHtml(
 					Html::el('span')
-						->setText($this->getOption('map-text-streetNumber') ? $this->translate($this->getOption('map-text-streetNumber')) : $this->translate('form.address.street'))
+						->setText($this->getOption('map-text-streetNumber') ? $this->translate($this->getOption('map-text-streetNumber')) : $this->translate('forms.address.street'))
 						. Html::el('span')->setClass($nameContainer . '[mapAddressStreetNumber]')
 				)
 					. Html::el('p')->setClass('col-sm-3')->setHtml(
 						Html::el('span')
-							->setText($this->getOption('map-text-city') ? $this->translate($this->getOption('map-text-city')) : $this->translate('form.address.city'))
+							->setText($this->getOption('map-text-city') ? $this->translate($this->getOption('map-text-city')) : $this->translate('forms.address.city'))
 							. Html::el('span')->setClass($nameContainer . '[mapAddressCity]')
 					)
 					. Html::el('p')->setClass('col-sm-3')->setHtml(
 						Html::el('span')
-							->setText($this->getOption('map-text-postCode') ? $this->translate($this->getOption('map-text-postCode')) : $this->translate('form.address.postCode'))
+							->setText($this->getOption('map-text-postCode') ? $this->translate($this->getOption('map-text-postCode')) : $this->translate('forms.address.postCode'))
 							. Html::el('span')->setClass($nameContainer . '[mapAddressPostCode]')
 					)
 					. Html::el('p')->setClass('col-sm-3')->setHtml(
