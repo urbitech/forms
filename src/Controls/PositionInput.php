@@ -21,12 +21,12 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 	private $placeId = '';
 
 	const DEFAULT_LAT = 49.8167003;
-	//const DEFAULT_LAT = 50;
 
 	const DEFAULT_LNG = 15.4749544;
-	//const DEFAULT_LNG = 15;	
 
 	const DEFAULT_ZOOM = 15;
+
+	const SEARCH_ZOOM = 18; // MAX 18
 
 
 	public function __construct($label = NULL)
@@ -168,6 +168,7 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 								'lat' => $this->getOption('map-lat') ?: self::DEFAULT_LAT,
 								'lon' => $this->getOption('map-lon') ?: self::DEFAULT_LNG,
 								'zoom' => $this->getOption('map-zoom') ?: self::DEFAULT_ZOOM,
+								'searchZoom' => $this->getOption('map-searchZoom') ?: self::SEARCH_ZOOM,
 							])
 						])
 							. Html::el('a', [
