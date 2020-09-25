@@ -18,11 +18,15 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 
 	private $lon = '';
 
+	private $placeId = '';
+
 	const DEFAULT_LAT = 49.8167003;
 	//const DEFAULT_LAT = 50;
 
 	const DEFAULT_LNG = 15.4749544;
 	//const DEFAULT_LNG = 15;	
+
+	const DEFAULT_ZOOM = 15;
 
 
 	public function __construct($label = NULL)
@@ -46,6 +50,7 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 	{
 		$this->lat = $this->getHttpData(Form::DATA_LINE, '[mapAddressLat]');
 		$this->lon = $this->getHttpData(Form::DATA_LINE, '[mapAddressLon]');
+		$this->placeId = $this->getHttpData(Form::DATA_LINE, '[placeId]');
 	}
 
 
@@ -55,7 +60,7 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 	public function getValue()
 	{
 		return self::validatePosition($this)
-			? new Position($this->lat, $this->lon)
+			? new Position($this->lat, $this->lon, $this->placeId)
 			: NULL;
 	}
 
@@ -67,6 +72,7 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 		} else {
 			$this->lat = $value->getLatitude();
 			$this->lon = $value->getLongitude();
+			$this->placeId = $value->getPlace();
 		}
 		return $this;
 	}
@@ -79,6 +85,29 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 
 		//$rules = Helpers::exportRules($this->getRules()) ?: NULL;
 		$rules = $this->modifyRulesControl(Helpers::exportRules($this->getRules())) ?: NULL;
+
+		$positionIdElement = Html::el('input', [
+			'type' => 'text',
+			'name' => $name . '[placeName]',
+			//'value' => $this->placeId,
+			'class' => $nameContainer . '[placeName] form-control mapPositionInput formAddressInput',
+			'data-block-id' => $nameContainer,
+			'autocomplete' => 'off',
+			'readonly' => true,
+			'data-url' => $this->getOption('data-url-places'),
+			'data-url-lat' => $this->getOption('data-url-lat'),
+			'data-url-lng' => $this->getOption('data-url-lng')
+		])
+			. Html::el('ul', [
+				'class' => $nameContainer . '[whispererListPlaceName] whispererList',
+				'data-parent-input' => $nameContainer . "[placeName]",
+				'data-block-id' => $nameContainer
+			])
+			. Html::el('input', [
+				'type' => 'hidden',
+				'name' => $name . '[placeId]',
+				'class' => $nameContainer . '[placeId]'
+			]);
 
 		$el = Html::el('div')->setClass('col-sm-12')->setHtml(
 			Html::el('div')->setClass($nameContainer . '[mapAddress] mapAddressFields row')->setHtml(
@@ -128,30 +157,31 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 			)
 
 			. Html::el('div')->setClass('col-sm-12')->setHtml(
-				Html::el('div')->setClass('map-box')->setHtml(
+				Html::el('div')->setClass('whisperer-box properStreet')->setHtml($positionIdElement)
+					. Html::el('div')->setClass('map-box')->setHtml(
 
-					Html::el('div', [
-						'id' => $nameContainer . '-map',
-						'class' => 'mapInit',
-						'data-map-container' => $nameContainer,
-						'data-map-options' => Json::encode([
-							'lat' => $this->getOption('map-lat') ?: self::DEFAULT_LAT,
-							'lon' => $this->getOption('map-lon') ?: self::DEFAULT_LNG,
-						])
-					])
-
-						. Html::el('a', [
-							'id' => $nameContainer . '-markerDestroy',
-							'class' => 'markerDestroy',
+						Html::el('div', [
+							'id' => $nameContainer . '-map',
+							'class' => 'mapInit',
 							'data-map-container' => $nameContainer,
-							'href' => '#'
-						])->setText('Zruš pozici')
+							'data-map-options' => Json::encode([
+								'lat' => $this->getOption('map-lat') ?: self::DEFAULT_LAT,
+								'lon' => $this->getOption('map-lon') ?: self::DEFAULT_LNG,
+								'zoom' => $this->getOption('map-zoom') ?: self::DEFAULT_ZOOM,
+							])
+						])
+							. Html::el('a', [
+								'id' => $nameContainer . '-markerDestroy',
+								'class' => 'markerDestroy',
+								'data-map-container' => $nameContainer,
+								'href' => '#'
+							])->setText('Zruš pozici')
 
-				)
+					)
 			);
 
 
-		return Html::el('div')->setClass('row')
+		return Html::el('div')->setClass('row positionPanel')
 			->setHtml($el)
 			->setId($nameContainer)
 			//->setAttribute('data-urbitech-form-position', 'mapPosition')
