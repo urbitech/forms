@@ -1,32 +1,34 @@
 {
-	"name": "urbitech/forms",
-	"description": "Reusable form coponents",
-	"version": "2.4.1",
-	"homepage": "https://urbitech.cz",
-	"type": "project",
-	"authors": [
-		{
-			"name": "Urbitech s.r.o.",
-			"homepage": "https://urbitech.cz"
-		}
-	],
-	"repositories": [
-        {
-            "type": "vcs",
-            "url": "http://git.urbitech.cz:3000/URBITECH/urbitech-forms.git"
-		},
-        {
-            "type": "vcs",
-            "url": "http://git.urbitech.cz:3000/URBITECH/urbitech-utils.git"
-        }
-	],
-	"autoload": {
-		"classmap": ["src/"]
-	},	 
-	"minimum-stability": "stable",
-	"require": {
-		"php": ">=7.4",
-		"nette/forms": "^2.4",
-		"urbitech/utils": "^2.4"
-	}
+  "name": "urbitech/forms",
+  "description": "Reusable form coponents",
+  "version": "2.4.2",
+  "homepage": "https://urbitech.cz",
+  "type": "project",
+  "authors": [
+    {
+      "name": "Urbitech s.r.o.",
+      "homepage": "https://urbitech.cz"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "http://git.urbitech.cz:3000/URBITECH/urbitech-forms.git"
+    },
+    {
+      "type": "vcs",
+      "url": "http://git.urbitech.cz:3000/URBITECH/urbitech-utils.git"
+    }
+  ],
+  "autoload": {
+    "classmap": [
+      "src/"
+    ]
+  },
+  "minimum-stability": "stable",
+  "require": {
+    "php": ">=7.4",
+    "nette/forms": "^2.4",
+    "urbitech/utils": "^2.4"
+  }
 }
