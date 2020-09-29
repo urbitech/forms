@@ -8,7 +8,7 @@ if (@!include __DIR__ . '/../vendor/autoload.php') {
 
 include __DIR__ . '/../src/Controls/AddressInput.php';
 include __DIR__ . '/../src/Controls/PositionInput.php';
-// include __DIR__ . '/../src/Controls/DateInput.php';
+include __DIR__ . '/../src/Controls/DateInput.php';
 
 use Nette\Forms\Form;
 use Nette\Utils\Html;
@@ -34,16 +34,12 @@ $form['position'] = new PositionInput('Pozice');
 $form['position']
     ->setOption('data-urbitech-form-address', 'address')
     ->setOption('controls-id', 'position')
-    ->setOption('class', 'form-group-wrap')
-    // ->setOption('data-url-lat', $this->getParameterId('lat'))
-    // ->setOption('data-url-lng', $this->getParameterId('lng'))
-;
+    ->setOption('class', 'form-group-wrap');
 
 
-// $form['date'] = new DateInput('Datum');
-// $form['date']
-//     ->addDateInput('date', 'Datum')
-//     ->setOption('placeholder', ['Den', 'Měsíc', 'Rok']);
+$form['date'] = new DateInput('Datum');
+$form['date']
+    ->setOption('placeholder', ['Den', 'Měsíc', 'Rok']);
 
 $form->addSubmit('submit', 'Poslat');
 
