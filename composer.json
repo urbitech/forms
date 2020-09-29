@@ -10,6 +10,9 @@
       "homepage": "https://urbitech.cz"
     }
   ],
+  "config": {
+    "secure-http": false
+  },
   "repositories": [
     {
       "type": "vcs",
@@ -28,7 +31,9 @@
   "minimum-stability": "stable",
   "require": {
     "php": ">=7.4",
+    "nette/di": "^2.4",
     "nette/forms": "^2.4",
-    "urbitech/utils": "^2.4"
+    "urbitech/utils": "^2.4",
+    "tracy/tracy": "^2.4"
   }
 }
