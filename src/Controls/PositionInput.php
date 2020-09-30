@@ -91,6 +91,7 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 			'name' => $name . '[placeName]',
 			//'value' => $this->placeId,
 			'class' => $nameContainer . '[placeName] form-control mapPositionInput formAddressInput',
+			'data-whisperer-list' => $nameContainer . '[whispererListPlaceName]',
 			'data-block-id' => $nameContainer,
 			'autocomplete' => 'off',
 			'readonly' => true,

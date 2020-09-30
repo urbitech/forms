@@ -89,7 +89,9 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 				'value' => $this->street,
 				'placeholder' => isset($placeholders[0]) ? $this->translate($placeholders[0]) : NULL,
 				'class' => $nameContainer . '[street] form-control formAddressInput',
-				'data-block-id' => $nameContainer
+				'data-block-id' => $nameContainer,
+				'autocomplete' => 'off',
+				'autocomplete' => 'chrome-off',
 			])->setId($this->getHtmlId())->setAttribute('data-nette-rules', $rules)
 
 		)
@@ -101,7 +103,9 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 					'value' => $this->houseNumber,
 					'placeholder' => isset($placeholders[3]) ? $this->translate($placeholders[3]) : NULL,
 					'class' => $nameContainer . '[houseNumber] form-control formAddressInput',
-					'data-block-id' => $nameContainer
+					'data-block-id' => $nameContainer,
+					'autocomplete' => 'off',
+					'autocomplete' => 'chrome-off',
 				])->setId($this->getHtmlId())->setAttribute('data-nette-rules', $rules)
 
 			)
@@ -118,7 +122,8 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 						'class' => $nameContainer . '[city] form-control formAddressInput',
 						'data-whisperer-list' => $nameContainer . '[whispererListCity]',
 						'data-block-id' => $nameContainer,
-						'autocomplete' => 'off'
+						'autocomplete' => 'off',
+						'autocomplete' => 'chrome-off'
 					])->setAttribute('data-nette-rules', $rules)
 						. Html::el('ul', [
 							'class' => $nameContainer . '[whispererListCity] whispererList',
@@ -141,7 +146,8 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 						'class' => $nameContainer . '[postCode] form-control formAddressInput',
 						'data-whisperer-list' => $nameContainer . '[whispererListPostCode]',
 						'data-block-id' => $nameContainer,
-						'autocomplete' => 'off'
+						'autocomplete' => 'off',
+						'autocomplete' => 'chrome-off'
 					])->setAttribute('data-nette-rules', $rules)
 						. Html::el('ul', [
 							'class' => $nameContainer . '[whispererListPostCode] whispererList',

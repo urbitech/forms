@@ -78,7 +78,7 @@ Urbitech.getReverseDataFromOSM = function (
           .classList.add("mapAddressFields__button--active");
       }
 
-      //Urbitech.setProperStreet(data.lat, data.lon, mainContainer);
+      Urbitech.setProperStreet(data.lat, data.lon, mainContainer);
     });
 };
 
@@ -417,7 +417,7 @@ Urbitech.getDataFromOSM = function (mainElement) {
         mapContainer + "[mapAddressLon]"
       )[0].value = lon;
 
-      //Urbitech.setProperStreet(lat, lon, mapContainer);
+      Urbitech.setProperStreet(lat, lon, mapContainer);
     }
   };
 

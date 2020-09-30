@@ -51,20 +51,29 @@ if ($form->isSuccess()) {
 
 ?>
 <!DOCTYPE html>
-<meta charset="utf-8">
-<title>Nette Forms basic example</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
-<!-- <link rel="stylesheet" media="screen" href="../src/assets/css/addressWhisperer.css" /> -->
-<link rel="stylesheet" media="screen" href="../src/assets/css/mapBox.css" />
-<script src="https://nette.github.io/resources/js/2/netteForms.js"></script>
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
-<script src="../src/assets/js/addressWhisperer.js"></script>
-<script src="../src/assets/js/validAddress.js"></script>
-<script src="../src/assets/js/validDate.js"></script>
-<script>
-    setTimeout(function() {
-        Urbitech.mapInit(false);
-    }, 1000);
-</script>
+<html>
 
-<?php $form->render() ?>
+<head>
+    <meta charset="utf-8">
+    <title>Nette Forms basic example</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+    <link rel="stylesheet" media="screen" href="../src/assets/css/addressWhisperer.css" />
+    <link rel="stylesheet" media="screen" href="../src/assets/css/mapBox.css" />
+
+</head>
+
+<body>
+    <?php $form->render() ?>
+
+    <script src="https://nette.github.io/resources/js/2/netteForms.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <script src="../src/assets/js/addressWhisperer.js"></script>
+    <script src="../src/assets/js/validAddress.js"></script>
+    <script src="../src/assets/js/validDate.js"></script>
+    <script>
+        Urbitech.mapInit(false);
+    </script>
+</body>
+
+</html>
