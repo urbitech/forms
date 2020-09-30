@@ -310,10 +310,10 @@ Urbitech.getDataFromOSM = function (mainElement) {
   let thisElement = document.getElementById(mainElement); // HLAVNÍ ELEMENT DO KTERÉHO SE PÍŠE
 
   // NASTAVENÍ HODNOT HLAVNÍCH PROMĚNNÝCH Z INPUT PRVKŮ
-  let street = document.getElementsByClassName(
+  let streetInput = document.getElementsByClassName(
     mainElement + "[street]"
-  )[0].value;
-  let houseNumber = document.getElementsByClassName(
+  )[0].value + " ";
+  let houseNumberInput = document.getElementsByClassName(
     mainElement + "[houseNumber]"
   )[0].value;
   let cityInput = document.getElementsByClassName(mainElement + "[city]")[0]
@@ -321,6 +321,10 @@ Urbitech.getDataFromOSM = function (mainElement) {
   let zipCodeInput = document.getElementsByClassName(
     mainElement + "[postCode]"
   )[0].value;
+
+  if(streetInput.toLowerCase() === cityInput.toLowerCase()+ " "){
+    streetInput = "";
+  }
 
   // ZJIŠTĚNÍ ZEMĚ PRO OMEZENÍ VYHLEDÁVÁNÍ
   let country = thisElement.getAttribute("data-country");
@@ -427,7 +431,7 @@ Urbitech.getDataFromOSM = function (mainElement) {
 
   fetch(
     "https://nominatim.openstreetmap.org/search/?street=" +
-      street +" "+ houseNumber +
+      streetInput + houseNumberInput +
       "&city=" +
       cityInput +
       "&postalcode=" +
