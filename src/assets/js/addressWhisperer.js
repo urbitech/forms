@@ -94,48 +94,50 @@ Urbitech.setProperStreet = function (lat, lon, container) {
     .getElementsByClassName(container + "[placeName]")[0]
     .getAttribute("data-url-lng");
 
-  fetch(fetchUrl + "&" + fetchLat + "=" + lat + "&" + fetchLng + "=" + lon)
-    .then((response) => response.json())
-    .then(function (data) {
-      let positionInputElement = document.getElementsByClassName(
-        container + "[placeName]"
-      )[0];
-      let positionInputElementId = document.getElementsByClassName(
-        container + "[placeId]"
-      )[0];
-
-      if (data.length) {
-        if (data.length === 1) {
-          positionInputElement.classList.add("mapPositionInput");
-          positionInputElement.value = data[0].name;
-          positionInputElementId.value = data[0].id;
-        } else {
-          let whispererListPlaceName = document.getElementsByClassName(
-            container + "[whispererListPlaceName]"
-          )[0];
-
-          while (whispererListPlaceName.firstChild) {
-            whispererListPlaceName.removeChild(
-              whispererListPlaceName.firstChild
-            );
+  if(fetchUrl !== null && fetchLat !== null && fetchLng !== null){
+    fetch(fetchUrl + "&" + fetchLat + "=" + lat + "&" + fetchLng + "=" + lon)
+      .then((response) => response.json())
+      .then(function (data) {
+        let positionInputElement = document.getElementsByClassName(
+          container + "[placeName]"
+        )[0];
+        let positionInputElementId = document.getElementsByClassName(
+          container + "[placeId]"
+        )[0];
+  
+        if (data.length) {
+          if (data.length === 1) {
+            positionInputElement.classList.add("mapPositionInput");
+            positionInputElement.value = data[0].name;
+            positionInputElementId.value = data[0].id;
+          } else {
+            let whispererListPlaceName = document.getElementsByClassName(
+              container + "[whispererListPlaceName]"
+            )[0];
+  
+            while (whispererListPlaceName.firstChild) {
+              whispererListPlaceName.removeChild(
+                whispererListPlaceName.firstChild
+              );
+            }
+  
+            positionInputElement.classList.remove("mapPositionInput");
+  
+            data.forEach((element) => {
+              item = document.createElement("li");
+              item.innerText = element.name;
+              item.setAttribute("data-id", element.id);
+              whispererListPlaceName.appendChild(item);
+            });
+  
+            whispererListPlaceName.classList.add("whispererList--active");
           }
-
-          positionInputElement.classList.remove("mapPositionInput");
-
-          data.forEach((element) => {
-            item = document.createElement("li");
-            item.innerText = element.name;
-            item.setAttribute("data-id", element.id);
-            whispererListPlaceName.appendChild(item);
-          });
-
-          whispererListPlaceName.classList.add("whispererList--active");
+        } else {
+          positionInputElement.value = "";
+          positionInputElementId.value = "";
         }
-      } else {
-        positionInputElement.value = "";
-        positionInputElementId.value = "";
-      }
-    });
+      });
+    }
 };
 
 // INICIALIZACE MAPY
