@@ -12,7 +12,9 @@ use URBITECH\Utils\Validators;
 class AddressInput extends \Nette\Forms\Controls\BaseControl
 {
 	/** @var string */
-	private	$streetNumber = '';
+	private	$street = '';
+
+	private	$houseNumber = '';
 
 	private $city = '';
 
@@ -32,13 +34,14 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 	 */
 	public function isFilled(): bool
 	{
-		return $this->streetNumber !== '' || $this->city !== '' || $this->postCode !== '';
+		return $this->street !== '' || $this->houseNumber !== '' || $this->city !== '' || $this->postCode !== '';
 	}
 
 
 	public function loadHttpData(): void
 	{
-		$this->streetNumber = $this->getHttpData(Form::DATA_LINE, '[streetNumber]');
+		$this->street = $this->getHttpData(Form::DATA_LINE, '[street]');
+		$this->houseNumber = $this->getHttpData(Form::DATA_LINE, '[houseNumber]');
 		$this->city = $this->getHttpData(Form::DATA_LINE, '[city]');
 		$this->postCode = $this->getHttpData(Form::DATA_LINE, '[postCode]');
 	}
@@ -50,7 +53,7 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 	public function getValue()
 	{
 		return self::validateAddress($this)
-			? new Address($this->streetNumber, $this->city, $this->postCode)
+			? new Address($this->street, $this->houseNumber, $this->city, $this->postCode)
 			: NULL;
 	}
 
@@ -58,9 +61,10 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 	public function setValue($value)
 	{
 		if ($value === NULL) {
-			$this->streetNumber = $this->city = $this->postCode = '';
+			$this->street = $this->houseNumber = $this->city = $this->postCode = '';
 		} else {
-			$this->streetNumber = $value->getStreetNumber();
+			$this->street = $value->getStreet();
+			$this->houseNumber = $value->getHouseNumber();
 			$this->city = $value->getCity();
 			$this->postCode = $value->getPostCode();
 		}
@@ -77,18 +81,30 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 
 		$rules = $this->modifyRulesControl(Helpers::exportRules($this->getRules())) ?: NULL;
 
-		$el = Html::el('div')->setClass('col-sm-12')->setHtml(
+		$el = Html::el('div')->setClass('col-sm-8')->setHtml(
 
 			Html::el('input', [
 				'type' => 'text',
-				'name' => $name . '[streetNumber]',
-				'value' => $this->streetNumber,
+				'name' => $name . '[street]',
+				'value' => $this->street,
 				'placeholder' => isset($placeholders[0]) ? $this->translate($placeholders[0]) : NULL,
-				'class' => $nameContainer . '[streetNumber] form-control formAddressInput',
+				'class' => $nameContainer . '[street] form-control formAddressInput',
 				'data-block-id' => $nameContainer
 			])->setId($this->getHtmlId())->setAttribute('data-nette-rules', $rules)
 
 		)
+			. Html::el('div')->setClass('col-sm-4')->setHtml(
+
+				Html::el('input', [
+					'type' => 'text',
+					'name' => $name . '[houseNumber]',
+					'value' => $this->houseNumber,
+					'placeholder' => isset($placeholders[3]) ? $this->translate($placeholders[3]) : NULL,
+					'class' => $nameContainer . '[houseNumber] form-control formAddressInput',
+					'data-block-id' => $nameContainer
+				])->setId($this->getHtmlId())->setAttribute('data-nette-rules', $rules)
+
+			)
 
 			. Html::el('div')->setClass('col-sm-8')->setHtml(
 
@@ -168,7 +184,8 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 	 */
 	public static function validateAddress(AddressInput $control)
 	{
-		return $control->streetNumber
+		return $control->street
+			&& $control->houseNumber
 			&& $control->city
 			&& Validators::validatePostCode($control->postCode);
 	}

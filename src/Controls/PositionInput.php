@@ -114,9 +114,14 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 
 				Html::el('p')->setClass('col-sm-3')->setHtml(
 					Html::el('span')
-						->setText($this->getOption('map-text-streetNumber') ? $this->translate($this->getOption('map-text-streetNumber')) : $this->translate('forms.address.street'))
-						. Html::el('span')->setClass($nameContainer . '[mapAddressStreetNumber]')
+						->setText($this->getOption('map-text-street') ? $this->translate($this->getOption('map-text-street')) : $this->translate('forms.address.street'))
+						. Html::el('span')->setClass($nameContainer . '[mapAddressStreet]')
 				)
+					. Html::el('p')->setClass('col-sm-3')->setHtml(
+						Html::el('span')
+							->setText($this->getOption('map-text-houseNmber') ? $this->translate($this->getOption('map-text-houseNumber')) : $this->translate('forms.address.houseNumber'))
+							. Html::el('span')->setClass($nameContainer . '[mapAddressHouseNumber]')
+					)
 					. Html::el('p')->setClass('col-sm-3')->setHtml(
 						Html::el('span')
 							->setText($this->getOption('map-text-city') ? $this->translate($this->getOption('map-text-city')) : $this->translate('forms.address.city'))

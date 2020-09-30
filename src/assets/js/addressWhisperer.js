@@ -31,17 +31,15 @@ Urbitech.getReverseDataFromOSM = function (
   )
     .then((response) => response.json())
     .then(function (data) {
-      let streetNumber = data.address.road + " " + data.address.house_number;
+      let street = data.address.road;
+      let houseNumber = data.address.house_number;
       let city = data.address.town || data.address.city || data.address.village;
 
       if (data.address.road === undefined) {
-        streetNumber = data.address.house_number;
+        street = "";
       }
       if (data.address.house_number === undefined) {
-        streetNumber = data.address.road;
-      }
-      if (streetNumber === undefined) {
-        streetNumber = "";
+        houseNumber = "";
       }
       if (data.address.suburb !== undefined && data.address.suburb !== city) {
         suburb = " - " + data.address.suburb;
@@ -51,8 +49,11 @@ Urbitech.getReverseDataFromOSM = function (
 
       // VLOŽENÍ DAT DO PRVKU PRO JEJICH ZOBRAZENÍ
       document.getElementsByClassName(
-        mainContainer + "[mapAddressStreetNumber]"
-      )[0].innerText = streetNumber;
+        mainContainer + "[mapAddressStreet]"
+      )[0].innerText = street;
+      document.getElementsByClassName(
+        mainContainer + "[mapAddressHouseNumber]"
+      )[0].innerText = houseNumber;      
       document.getElementsByClassName(
         mainContainer + "[mapAddressCity]"
       )[0].innerText = city + suburb;
@@ -77,7 +78,7 @@ Urbitech.getReverseDataFromOSM = function (
           .classList.add("mapAddressFields__button--active");
       }
 
-      Urbitech.setProperStreet(data.lat, data.lon, mainContainer);
+      //Urbitech.setProperStreet(data.lat, data.lon, mainContainer);
     });
 };
 
@@ -230,9 +231,14 @@ Urbitech.mapInit = function (el) {
 
         // VLOŽENÍ ZÍSKANÝCH HODNOT DO SPOJENÉHO FORMULÁŘE
         document.getElementsByClassName(
-          linkedContainer + "[streetNumber]"
+          linkedContainer + "[street]"
         )[0].value = document.getElementsByClassName(
-          mainContainer + "[mapAddressStreetNumber]"
+          mainContainer + "[mapAddressStreet]"
+        )[0].innerText;
+        document.getElementsByClassName(
+          linkedContainer + "[houseNumber]"
+        )[0].value = document.getElementsByClassName(
+          mainContainer + "[mapAddressHouseNumber]"
         )[0].innerText;
         document.getElementsByClassName(
           linkedContainer + "[city]"
@@ -254,6 +260,7 @@ Urbitech.mapInit = function (el) {
       .addEventListener("click", (event) => {
         event.preventDefault();
 
+        
         if (marker[mainContainer] !== undefined) {
           map[mainContainer].removeLayer(marker[mainContainer]);
           document.getElementsByClassName(
@@ -264,14 +271,17 @@ Urbitech.mapInit = function (el) {
           )[0].value = "";
 
           document.getElementsByClassName(
-            mainContainer + "[mapAddressStreetNumber]"
-          )[0].value = "";
+            mainContainer + "[mapAddressStreet]"
+          )[0].innerText = "";
+          document.getElementsByClassName(
+            mainContainer + "[mapAddressHouseNumber]"
+          )[0].innerText = "";
           document.getElementsByClassName(
             mainContainer + "[mapAddressCity]"
-          )[0].value = "";
+          )[0].innerText = "";
           document.getElementsByClassName(
             mainContainer + "[mapAddressPostCode]"
-          )[0].value = "";
+          )[0].innerText = "";
           document.getElementsByClassName(
             mainContainer + "[placeName]"
           )[0].value = "";
@@ -300,8 +310,11 @@ Urbitech.getDataFromOSM = function (mainElement) {
   let thisElement = document.getElementById(mainElement); // HLAVNÍ ELEMENT DO KTERÉHO SE PÍŠE
 
   // NASTAVENÍ HODNOT HLAVNÍCH PROMĚNNÝCH Z INPUT PRVKŮ
-  let streetNuber = document.getElementsByClassName(
-    mainElement + "[streetNumber]"
+  let street = document.getElementsByClassName(
+    mainElement + "[street]"
+  )[0].value;
+  let houseNumber = document.getElementsByClassName(
+    mainElement + "[houseNumber]"
   )[0].value;
   let cityInput = document.getElementsByClassName(mainElement + "[city]")[0]
     .value;
@@ -400,7 +413,7 @@ Urbitech.getDataFromOSM = function (mainElement) {
         mapContainer + "[mapAddressLon]"
       )[0].value = lon;
 
-      Urbitech.setProperStreet(lat, lon, mapContainer);
+      //Urbitech.setProperStreet(lat, lon, mapContainer);
     }
   };
 
@@ -414,7 +427,7 @@ Urbitech.getDataFromOSM = function (mainElement) {
 
   fetch(
     "https://nominatim.openstreetmap.org/search/?street=" +
-      streetNuber +
+      street +" "+ houseNumber +
       "&city=" +
       cityInput +
       "&postalcode=" +
