@@ -34,7 +34,7 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 	 */
 	public function isFilled(): bool
 	{
-		return $this->street !== '' || $this->houseNumber !== '' || $this->city !== '' || $this->postCode !== '';
+		return $this->houseNumber !== '' || $this->city !== '' || $this->postCode !== '';
 	}
 
 
@@ -92,7 +92,7 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 				'data-block-id' => $nameContainer,
 				'autocomplete' => 'off',
 				'autocomplete' => 'chrome-off',
-			])->setId($this->getHtmlId())->setAttribute('data-nette-rules', $rules)
+			])->setId($this->getHtmlId())
 
 		)
 			. Html::el('div')->setClass('col-sm-4')->setHtml(
@@ -190,8 +190,7 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 	 */
 	public static function validateAddress(AddressInput $control)
 	{
-		return $control->street
-			&& $control->houseNumber
+		return $control->houseNumber
 			&& $control->city
 			&& Validators::validatePostCode($control->postCode);
 	}
