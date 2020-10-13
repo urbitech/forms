@@ -253,6 +253,7 @@ URBITECH.mapInit = function (el) {
 		// NASTAVENÍ POZICE MAPY
 		URBITECH.setMap = function (lat, lon, zoom, isMarker) {
 			map[mainContainer].setView([lat, lon], zoom);
+
 			isMarker
 				? (marker[mainContainer] = L.marker([lat, lon]).addTo(
 						map[mainContainer]
@@ -481,7 +482,7 @@ URBITECH.getDataFromOSM = function (mainElement) {
 			.getAttribute("data-autofill-position")
 	);
 
-	if (autoFillPosition) {
+	if (true) {
 		URBITECH.changeMapPosition = function (data, mapContainer) {
 			if (cityInput !== "" || zipCodeInput !== "") {
 				// POSUNUJEME AŽ KDYŽ MÁME ASPOŇ MĚSTO NEBO PSČ
@@ -504,16 +505,18 @@ URBITECH.getDataFromOSM = function (mainElement) {
 				let lat = data[getIndex].lat;
 				let lon = data[getIndex].lon;
 
-				map[mapContainer].setView([lat, lon], 18); // POSUNEME MAPU
+				if (autoFillPosition) {
+					map[mapContainer].setView([lat, lon], 18); // POSUNEME MAPU
 
-				if (marker[mapContainer] === undefined) {
-					// KDYŽ NENÍ ŽÁDNÝ MARKER NA MAPĚ, TAK JEJ VYTVOŘÍME, JINAK HO POSUNEME¨
+					if (marker[mapContainer] === undefined) {
+						// KDYŽ NENÍ ŽÁDNÝ MARKER NA MAPĚ, TAK JEJ VYTVOŘÍME, JINAK HO POSUNEME¨
 
-					marker[mapContainer] = L.marker([lat, lon]).addTo(
-						map[mapContainer]
-					);
-				} else {
-					marker[mapContainer].setLatLng([lat, lon]);
+						marker[mapContainer] = L.marker([lat, lon]).addTo(
+							map[mapContainer]
+						);
+					} else {
+						marker[mapContainer].setLatLng([lat, lon]);
+					}
 				}
 
 				document.getElementsByClassName(
@@ -592,10 +595,7 @@ URBITECH.getDataFromOSM = function (mainElement) {
 						.getAttribute("data-autofill-position")
 				);
 
-				if (
-					document.getElementById(mapContainer) !== null &&
-					autoFillPosition
-				) {
+				if (document.getElementById(mapContainer) !== null) {
 					URBITECH.changeMapPosition(data, mapContainer); // POSUN MAPY NA MÍSTO
 				}
 			} else {
