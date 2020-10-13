@@ -1,11 +1,8 @@
-URBITECH Forms
-=============
+# URBITECH Forms
 
 Components to Nette form Plugins
 
-
-Composer SetUp
---------------
+## Composer SetUp
 
 Link to sources on Git
 
@@ -24,8 +21,8 @@ Link to sources on Git
 
 Configure extension to config.neon
 
-	extensions:
-		urbitechForms: URBITECH\Forms\DI\FormsExtension
+    extensions:
+    	urbitechForms: URBITECH\Forms\DI\FormsExtension
 
 Require Components
 
@@ -35,7 +32,7 @@ Require Components
 ```
 
 Component frontpack/composer-assets-plugin is component for move assets file from vendor to www directory
-Asterisk "*" in urbitech/forms can be replace with concreate version of repository. For example: "^2.4" 
+Asterisk "\*" in urbitech/forms can be replace with concreate version of repository. For example: "^2.4"
 
 SetUp of assets folder removement
 
@@ -50,41 +47,50 @@ SetUp of assets folder removement
 	},
 	"assets-target": {
 		"urbitech/forms": "www/assets/urbitech-forms"
-	}		
+	}
 }
 ```
 
 On localhost is necessary disable secure-http
 
-	"secure-http": false,
+    "secure-http": false,
 
-
-Form in presenter SetUp
------------------------
+## Form in presenter SetUp
 
 Set country for search
 
-	->setOption("data-country", "cz")
+    ->setOption("data-country", "cz")
 
 It's possible to set more countries coma separated.
 
-	->setOption("data-country", "cz,sk")
+    ->setOption("data-country", "cz,sk")
 
 Set linked container with map
 
-	->setOption("data-urbitech-form-position", "MAP_CONTAINER_ID")
+    ->setOption("data-urbitech-form-position", "MAP_CONTAINER_ID")
 
 Set linked container with address
 
-	->setOption("data-urbitech-form-address", "ADDRESS_CONTAINER_ID")
+    ->setOption("data-urbitech-form-address", "ADDRESS_CONTAINER_ID")
 
 Set custom container ID. If is unset, aplication use container name
 
-	->setOption("controls-id", "CUSTOM_ID")
+    ->setOption("controls-id", "CUSTOM_ID")
 
-Other
------
+Show / Hide button for use whispered data from form to map (for addressInput)
+
+    ->setOption('data-useButton', 1)
+
+Allow autofill position in map when address form is used (for addressInput)
+
+    ->setOption('data-autofill-position', 1)
+
+Allow autofill address to form after map click (for positionInput)
+
+    ->setOption('data-autofill-address', 1)
+
+## Other
 
 Less styles requires Bootstrap variables
 
-	@import "variables.less";
+    @import "variables.less";
