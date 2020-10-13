@@ -10,7 +10,6 @@ use Nette\Utils\Json;
 use URBITECH\Utils\Position;
 use Nette\Utils\Validators;
 
-
 class PositionInput extends \Nette\Forms\Controls\BaseControl
 {
 	/** @var string */
@@ -19,6 +18,8 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 	private $lon = '';
 
 	private $placeId = '';
+
+	private $placeName = '';
 
 	const DEFAULT_LAT = 49.8167003;
 
@@ -73,6 +74,7 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 			$this->lat = $value->getLatitude();
 			$this->lon = $value->getLongitude();
 			$this->placeId = $value->getPlace();
+			$this->placeName = $value->getName();
 		}
 		return $this;
 	}
@@ -85,6 +87,11 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 
 		//$rules = Helpers::exportRules($this->getRules()) ?: NULL;
 		$rules = $this->modifyRulesControl(Helpers::exportRules($this->getRules())) ?: NULL;
+
+		$defaultStreetOption = Html::el('option', [
+			'value' => $this->placeId,
+			'selected' => "selected"
+		])->setText($this->placeName);
 
 		$positionIdElement = Html::el('input', [
 			'type' => 'text',
@@ -164,35 +171,35 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 
 			. Html::el('div')->setClass('col-sm-12')->setHtml(
 				//Html::el('div')->setClass('whisperer-box properStreet')->setHtml($positionIdElement)
-				Html::el('div')->setClass('map-box')->setHtml(
+				Html::el('select', [
+					'name' => $name . '[placeId]',
+					'class' => $nameContainer . '[placeName] form-control mapPositionInput formAddressInput',
+					'data-block-id' => $nameContainer,
+					'data-url' => $this->getOption('data-url-places'),
+					'data-url-lat' => $this->getOption('data-url-lat'),
+					'data-url-lng' => $this->getOption('data-url-lng')
+				])->setHtml($defaultStreetOption)
+					. Html::el('div')->setClass('map-box')->setHtml(
 
-					Html::el('div', [
-						'id' => $nameContainer . '-map',
-						'class' => 'mapInit',
-						'data-map-container' => $nameContainer,
-						'data-map-options' => Json::encode([
-							'lat' => $this->getOption('map-lat') ?: self::DEFAULT_LAT,
-							'lon' => $this->getOption('map-lon') ?: self::DEFAULT_LNG,
-							'zoom' => $this->getOption('map-zoom') ?: self::DEFAULT_ZOOM,
-							'searchZoom' => $this->getOption('map-searchZoom') ?: self::SEARCH_ZOOM,
-						])
-					])
-						. Html::el('a', [
-							'id' => $nameContainer . '-markerDestroy',
-							'class' => 'markerDestroy',
+						Html::el('div', [
+							'id' => $nameContainer . '-map',
+							'class' => 'mapInit',
 							'data-map-container' => $nameContainer,
-							'href' => '#'
-						])->setText('Zruš pozici')
+							'data-map-options' => Json::encode([
+								'lat' => $this->getOption('map-lat') ?: self::DEFAULT_LAT,
+								'lon' => $this->getOption('map-lon') ?: self::DEFAULT_LNG,
+								'zoom' => $this->getOption('map-zoom') ?: self::DEFAULT_ZOOM,
+								'searchZoom' => $this->getOption('map-searchZoom') ?: self::SEARCH_ZOOM,
+							])
+						])
+							. Html::el('a', [
+								'id' => $nameContainer . '-markerDestroy',
+								'class' => 'markerDestroy',
+								'data-map-container' => $nameContainer,
+								'href' => '#'
+							])->setText('Zruš pozici')
 
-				)
-					. Html::el('select', [
-						'name' => $name . '[placeName]',
-						'class' => $nameContainer . '[placeName] form-control mapPositionInput formAddressInput',
-						'data-block-id' => $nameContainer,
-						'data-url' => $this->getOption('data-url-places'),
-						'data-url-lat' => $this->getOption('data-url-lat'),
-						'data-url-lng' => $this->getOption('data-url-lng')
-					])
+					)
 			);
 
 

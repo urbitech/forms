@@ -57,6 +57,13 @@ URBITECH.getReverseDataFromOSM = function (
 					.getAttribute("data-autofill-address")
 			);
 
+			document.getElementsByClassName(
+				mainContainer + "[mapAddressLat]"
+			)[0].value = data.lat;
+			document.getElementsByClassName(
+				mainContainer + "[mapAddressLon]"
+			)[0].value = data.lon;
+
 			if (autoFillAddress) {
 				URBITECH.autoFillAddress(
 					street,
@@ -82,13 +89,6 @@ URBITECH.getReverseDataFromOSM = function (
 			document.getElementsByClassName(
 				mainContainer + "[mapAddressPostCode]"
 			)[0].innerText = data.address.postcode;
-			document.getElementsByClassName(
-				mainContainer + "[mapAddressLat]"
-			)[0].value = data.lat;
-			document.getElementsByClassName(
-				mainContainer + "[mapAddressLon]"
-			)[0].value = data.lon;
-
 			document
 				.getElementsByClassName(mainContainer + "[mapAddress]")[0]
 				.classList.add("mapAddressFields--active");
@@ -100,9 +100,10 @@ URBITECH.getReverseDataFromOSM = function (
             )[0]
             .classList.add("mapAddressFields__button--active");
           }
-*/
-			URBITECH.setProperStreet(data.lat, data.lon, mainContainer);
+		*/
 		});
+
+	URBITECH.setProperStreet(lat, lon, mainContainer);
 };
 
 URBITECH.autoFillAddress = function (
@@ -290,7 +291,7 @@ URBITECH.mapInit = function (el) {
 					mapOptions.lat,
 					mapOptions.lon,
 					mapOptions.zoom,
-					true
+					false
 				);
 			}
 		}
