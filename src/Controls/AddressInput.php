@@ -81,6 +81,16 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 
 		$rules = $this->modifyRulesControl(Helpers::exportRules($this->getRules())) ?: NULL;
 
+		if ($this->getOption("data-useButton") && !$this->getOption("data-autofill-position")) {
+			$useButton = Html::el('button', [
+				'data-block-id' => $nameContainer,
+				'class' => $nameContainer . '[mapAddressUse] useButton btn btn-primary',
+			])
+				->setText($this->getOption('use-button-label') ? $this->translate($this->getOption('use-button-label')) : $this->translate('forms.button.use'));
+		} else {
+			$useButton = "";
+		}
+
 		$el = Html::el('div')->setClass('col-sm-8')->setHtml(
 
 			Html::el('input', [
@@ -156,7 +166,9 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 						])
 
 				)
-			);
+			)
+
+			. Html::el('div')->setClass('col-sm-12')->setHtml($useButton);
 
 
 		return Html::el('div')->setClass('row')
@@ -164,7 +176,8 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 			->setId($nameContainer)
 			//->setAttribute('data-urbitech-form-address', 'addressWhisperer')
 			->setAttribute('data-urbitech-form-position', $this->getOption("data-urbitech-form-position"))
-			->setAttribute('data-country', $this->getOption("data-country"));
+			->setAttribute('data-country', $this->getOption("data-country"))
+			->setAttribute('data-autofill-position', $this->getOption("data-autofill-position") ?: 0);
 	}
 
 

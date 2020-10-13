@@ -110,7 +110,7 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 				'class' => $nameContainer . '[placeId]'
 			]);
 
-		$el = Html::el('div')->setClass('col-sm-12')->setHtml(
+		$el = /*Html::el('div')->setClass('col-sm-12')->setHtml(
 			Html::el('div')->setClass($nameContainer . '[mapAddress] mapAddressFields row')->setHtml(
 
 				Html::el('p')->setClass('col-sm-3')->setHtml(
@@ -140,9 +140,9 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 					)
 
 			)
-		)
+		)*/
 
-			. Html::el('div')->setClass('col-sm-6')->setHtml(
+			Html::el('div')->setClass('col-sm-6')->setHtml(
 				Html::el('input', [
 					'type' => 'text',
 					'name' => $name . '[mapAddressLat]',
@@ -163,28 +163,36 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 			)
 
 			. Html::el('div')->setClass('col-sm-12')->setHtml(
-				Html::el('div')->setClass('whisperer-box properStreet')->setHtml($positionIdElement)
-					. Html::el('div')->setClass('map-box')->setHtml(
+				//Html::el('div')->setClass('whisperer-box properStreet')->setHtml($positionIdElement)
+				Html::el('div')->setClass('map-box')->setHtml(
 
-						Html::el('div', [
-							'id' => $nameContainer . '-map',
-							'class' => 'mapInit',
-							'data-map-container' => $nameContainer,
-							'data-map-options' => Json::encode([
-								'lat' => $this->getOption('map-lat') ?: self::DEFAULT_LAT,
-								'lon' => $this->getOption('map-lon') ?: self::DEFAULT_LNG,
-								'zoom' => $this->getOption('map-zoom') ?: self::DEFAULT_ZOOM,
-								'searchZoom' => $this->getOption('map-searchZoom') ?: self::SEARCH_ZOOM,
-							])
+					Html::el('div', [
+						'id' => $nameContainer . '-map',
+						'class' => 'mapInit',
+						'data-map-container' => $nameContainer,
+						'data-map-options' => Json::encode([
+							'lat' => $this->getOption('map-lat') ?: self::DEFAULT_LAT,
+							'lon' => $this->getOption('map-lon') ?: self::DEFAULT_LNG,
+							'zoom' => $this->getOption('map-zoom') ?: self::DEFAULT_ZOOM,
+							'searchZoom' => $this->getOption('map-searchZoom') ?: self::SEARCH_ZOOM,
 						])
-							. Html::el('a', [
-								'id' => $nameContainer . '-markerDestroy',
-								'class' => 'markerDestroy',
-								'data-map-container' => $nameContainer,
-								'href' => '#'
-							])->setText('Zruš pozici')
+					])
+						. Html::el('a', [
+							'id' => $nameContainer . '-markerDestroy',
+							'class' => 'markerDestroy',
+							'data-map-container' => $nameContainer,
+							'href' => '#'
+						])->setText('Zruš pozici')
 
-					)
+				)
+					. Html::el('select', [
+						'name' => $name . '[placeName]',
+						'class' => $nameContainer . '[placeName] form-control mapPositionInput formAddressInput',
+						'data-block-id' => $nameContainer,
+						'data-url' => $this->getOption('data-url-places'),
+						'data-url-lat' => $this->getOption('data-url-lat'),
+						'data-url-lng' => $this->getOption('data-url-lng')
+					])
 			);
 
 
@@ -193,7 +201,8 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 			->setId($nameContainer)
 			//->setAttribute('data-urbitech-form-position', 'mapPosition')
 			->setAttribute('data-urbitech-form-address', $this->getOption("data-urbitech-form-address"))
-			->setAttribute('data-country', $this->getOption("data-country"));
+			->setAttribute('data-country', $this->getOption("data-country"))
+			->setAttribute('data-autofill-address', $this->getOption("data-autofill-address") ?: 0);
 	}
 
 
