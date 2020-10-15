@@ -73,34 +73,24 @@ URBITECH.getReverseDataFromOSM = function (
 					mainContainer,
 					linkedContainer
 				);
+			} else {
+				// VLOŽENÍ DAT DO PRVKU PRO JEJICH ZOBRAZENÍ
+				document.getElementsByClassName(
+					mainContainer + "[mapAddressStreet]"
+				)[0].innerText = street;
+				document.getElementsByClassName(
+					mainContainer + "[mapAddressHouseNumber]"
+				)[0].innerText = houseNumber;
+				document.getElementsByClassName(
+					mainContainer + "[mapAddressCity]"
+				)[0].innerText = city + suburb;
+				document.getElementsByClassName(
+					mainContainer + "[mapAddressPostCode]"
+				)[0].innerText = data.address.postcode;
+				document
+					.getElementsByClassName(mainContainer + "[mapAddress]")[0]
+					.classList.add("mapAddressFields--active");
 			}
-
-			/*
-			// VLOŽENÍ DAT DO PRVKU PRO JEJICH ZOBRAZENÍ
-			document.getElementsByClassName(
-				mainContainer + "[mapAddressStreet]"
-			)[0].innerText = street;
-			document.getElementsByClassName(
-				mainContainer + "[mapAddressHouseNumber]"
-			)[0].innerText = houseNumber;
-			document.getElementsByClassName(
-				mainContainer + "[mapAddressCity]"
-			)[0].innerText = city + suburb;
-			document.getElementsByClassName(
-				mainContainer + "[mapAddressPostCode]"
-			)[0].innerText = data.address.postcode;
-			document
-				.getElementsByClassName(mainContainer + "[mapAddress]")[0]
-				.classList.add("mapAddressFields--active");
-        if (document.getElementById(linkedContainer) !== null) {
-          // ZOBRAZENÍ TLAČÍTKA POUŽÍT, KDYŽ MÁME SPOJENÝ FORMULÁŘ
-          document
-					.getElementsByClassName(
-            mainContainer + "[mapAddressUse]"
-            )[0]
-            .classList.add("mapAddressFields__button--active");
-          }
-		*/
 		});
 
 	URBITECH.setProperStreet(lat, lon, mainContainer);
@@ -482,7 +472,7 @@ URBITECH.getDataFromOSM = function (mainElement) {
 			.getAttribute("data-autofill-position")
 	);
 
-	if (true) {
+	if (autoFillPosition) {
 		URBITECH.changeMapPosition = function (data, mapContainer) {
 			if (cityInput !== "" || zipCodeInput !== "") {
 				// POSUNUJEME AŽ KDYŽ MÁME ASPOŇ MĚSTO NEBO PSČ
@@ -595,7 +585,10 @@ URBITECH.getDataFromOSM = function (mainElement) {
 						.getAttribute("data-autofill-position")
 				);
 
-				if (document.getElementById(mapContainer) !== null) {
+				if (
+					document.getElementById(mapContainer) !== null &&
+					autoFillPosition
+				) {
 					URBITECH.changeMapPosition(data, mapContainer); // POSUN MAPY NA MÍSTO
 				}
 			} else {
@@ -608,74 +601,129 @@ Array.from(document.getElementsByClassName("useButton")).forEach((item) => {
 	item.addEventListener("click", (event) => {
 		event.preventDefault();
 
-		let mainElement = item.getAttribute("data-block-id");
-		let mapElement = document
-			.getElementById(mainElement)
-			.getAttribute("data-urbitech-form-position");
+		if (event.target.classList.contains("useAddress")) {
+			URBITECH.setDataToMap(item);
+		}
 
-		if (mainElement !== null) {
-			// NASTAVENÍ HODNOT HLAVNÍCH PROMĚNNÝCH Z INPUT PRVKŮ
-			let streetInput =
-				document.getElementsByClassName(mainElement + "[street]")[0]
-					.value + " ";
-			let houseNumberInput = document.getElementsByClassName(
-				mainElement + "[houseNumber]"
-			)[0].value;
-			let cityInput = document.getElementsByClassName(
-				mainElement + "[city]"
-			)[0].value;
-			let zipCodeInput = document.getElementsByClassName(
-				mainElement + "[postCode]"
-			)[0].value;
-
-			// ZJIŠTĚNÍ ZEMĚ PRO OMEZENÍ VYHLEDÁVÁNÍ
-			let country = document
-				.getElementById(mainElement)
-				.getAttribute("data-country");
-			if (country === null) {
-				country = "";
-			}
-
-			fetch(
-				"https://nominatim.openstreetmap.org/search/?street=" +
-					streetInput +
-					houseNumberInput +
-					"&city=" +
-					cityInput +
-					"&postalcode=" +
-					zipCodeInput +
-					"&countrycodes=" +
-					country +
-					"&addressdetails=1&limit=50&format=json"
-			)
-				.then((response) => response.json())
-				.then(function (data) {
-					if (data.length) {
-						let getIndex = 0;
-
-						data.forEach((element, index) => {
-							// KDYŽ MÁ VYBRANÝ ELEMENT ČÍSLO DOMU, MĚSTO A PSČ, TAK PŘESUNEME MAPU NA DANÉ MÍSTO
-							if (
-								element.address.house_number &&
-								(element.address.city ||
-									element.address.town ||
-									element.address.village) &&
-								element.address.postcode
-							) {
-								getIndex = index;
-							} // JINAK BY SE MAPA POSUNULA NA STŘED OBCE
-						});
-
-						let lat = data[getIndex].lat;
-						let lon = data[getIndex].lon;
-
-						map[mapElement].setView([lat, lon], 18);
-						marker[mapElement].setLatLng([lat, lon]);
-					}
-				});
+		if (event.target.classList.contains("usePosition")) {
+			URBITECH.setDataToAddress(item);
 		}
 	});
 });
+
+URBITECH.setDataToMap = function (item) {
+	let mainElement = item.getAttribute("data-block-id");
+	let mapElement = document
+		.getElementById(mainElement)
+		.getAttribute("data-urbitech-form-position");
+
+	if (mainElement !== null) {
+		// NASTAVENÍ HODNOT HLAVNÍCH PROMĚNNÝCH Z INPUT PRVKŮ
+		let streetInput =
+			document.getElementsByClassName(mainElement + "[street]")[0].value +
+			" ";
+		let houseNumberInput = document.getElementsByClassName(
+			mainElement + "[houseNumber]"
+		)[0].value;
+		let cityInput = document.getElementsByClassName(
+			mainElement + "[city]"
+		)[0].value;
+		let zipCodeInput = document.getElementsByClassName(
+			mainElement + "[postCode]"
+		)[0].value;
+
+		// ZJIŠTĚNÍ ZEMĚ PRO OMEZENÍ VYHLEDÁVÁNÍ
+		let country = document
+			.getElementById(mainElement)
+			.getAttribute("data-country");
+		if (country === null) {
+			country = "";
+		}
+
+		fetch(
+			"https://nominatim.openstreetmap.org/search/?street=" +
+				streetInput +
+				houseNumberInput +
+				"&city=" +
+				cityInput +
+				"&postalcode=" +
+				zipCodeInput +
+				"&countrycodes=" +
+				country +
+				"&addressdetails=1&limit=50&format=json"
+		)
+			.then((response) => response.json())
+			.then(function (data) {
+				if (data.length) {
+					let getIndex = 0;
+
+					data.forEach((element, index) => {
+						// KDYŽ MÁ VYBRANÝ ELEMENT ČÍSLO DOMU, MĚSTO A PSČ, TAK PŘESUNEME MAPU NA DANÉ MÍSTO
+						if (
+							element.address.house_number &&
+							(element.address.city ||
+								element.address.town ||
+								element.address.village) &&
+							element.address.postcode
+						) {
+							getIndex = index;
+						} // JINAK BY SE MAPA POSUNULA NA STŘED OBCE
+					});
+
+					let lat = data[getIndex].lat;
+					let lon = data[getIndex].lon;
+
+					map[mapElement].setView([lat, lon], 18);
+					marker[mapElement].setLatLng([lat, lon]);
+
+					document.getElementsByClassName(
+						mapElement + "[mapAddressLat]"
+					)[0].value = lat;
+					document.getElementsByClassName(
+						mapElement + "[mapAddressLon]"
+					)[0].value = lon;
+
+					URBITECH.setProperStreet(lat, lon, mapElement);
+				}
+			});
+	}
+};
+
+URBITECH.setDataToAddress = function (item) {
+	let mainElement = item.getAttribute("data-block-id");
+	let addressElement = document
+		.getElementById(mainElement)
+		.getAttribute("data-urbitech-form-address");
+
+	let searchedStreet = document.getElementsByClassName(
+		mainElement + "[mapAddressStreet]"
+	)[0].innerText;
+
+	let searchedHouseNumber = document.getElementsByClassName(
+		mainElement + "[mapAddressHouseNumber]"
+	)[0].innerText;
+
+	let searchedCity = document.getElementsByClassName(
+		mainElement + "[mapAddressCity]"
+	)[0].innerText;
+
+	let searchedPostCode = document.getElementsByClassName(
+		mainElement + "[mapAddressPostCode]"
+	)[0].innerText;
+
+	document.getElementsByClassName(
+		addressElement + "[street]"
+	)[0].value = searchedStreet;
+	document.getElementsByClassName(
+		addressElement + "[houseNumber]"
+	)[0].value = searchedHouseNumber;
+	document.getElementsByClassName(
+		addressElement + "[city]"
+	)[0].value = searchedCity;
+	document.getElementsByClassName(
+		addressElement + "[postCode]"
+	)[0].value = searchedPostCode;
+};
 
 /* ------------ EVENT LISTENER NA INPUT KTERÝ SPOUŠTÍ QUERY NA ADRESU ------------ */
 var timeout = null;

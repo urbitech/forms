@@ -82,9 +82,10 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 		$rules = $this->modifyRulesControl(Helpers::exportRules($this->getRules())) ?: NULL;
 
 		if ($this->getOption("data-useButton") && !$this->getOption("data-autofill-position")) {
-			$useButton = Html::el('button', [
+			$useButton = Html::el('a', [
 				'data-block-id' => $nameContainer,
-				'class' => $nameContainer . '[mapAddressUse] useButton btn btn-primary',
+				'href' => "#",
+				'class' => $nameContainer . '[mapAddressUse] useButton useAddress btn btn-primary',
 			])
 				->setText($this->getOption('use-button-label') ? $this->translate($this->getOption('use-button-label')) : $this->translate('forms.button.use'));
 		} else {

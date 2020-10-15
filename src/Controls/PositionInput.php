@@ -88,76 +88,31 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 		//$rules = Helpers::exportRules($this->getRules()) ?: NULL;
 		$rules = $this->modifyRulesControl(Helpers::exportRules($this->getRules())) ?: NULL;
 
+		if ($this->getOption("data-useButton") && !$this->getOption("data-autofill-address")) {
+			$useButton = Html::el('a', [
+				'data-block-id' => $nameContainer,
+				'href' => "#",
+				'class' => $nameContainer . '[mapAddressUse] useButton usePosition btn btn-primary',
+			])
+				->setText($this->getOption('use-button-label') ? $this->translate($this->getOption('use-button-label')) : $this->translate('forms.button.use'));
+		} else {
+			$useButton = "";
+		}
+
 		$defaultStreetOption = Html::el('option', [
 			'value' => $this->placeId,
 			'selected' => "selected"
 		])->setText($this->placeName);
 
-		$positionIdElement = Html::el('input', [
-			'type' => 'text',
-			'name' => $name . '[placeName]',
-			//'value' => $this->placeId,
-			'class' => $nameContainer . '[placeName] form-control mapPositionInput formAddressInput',
-			'data-whisperer-list' => $nameContainer . '[whispererListPlaceName]',
-			'data-block-id' => $nameContainer,
-			'autocomplete' => 'off',
-			'readonly' => true,
-			'data-url' => $this->getOption('data-url-places'),
-			'data-url-lat' => $this->getOption('data-url-lat'),
-			'data-url-lng' => $this->getOption('data-url-lng')
-		])
-			. Html::el('ul', [
-				'class' => $nameContainer . '[whispererListPlaceName] whispererList',
-				'data-parent-input' => $nameContainer . "[placeName]",
-				'data-block-id' => $nameContainer
-			])
-			. Html::el('input', [
-				'type' => 'hidden',
-				'name' => $name . '[placeId]',
-				'class' => $nameContainer . '[placeId]'
-			]);
-
-		$el = /*Html::el('div')->setClass('col-sm-12')->setHtml(
-			Html::el('div')->setClass($nameContainer . '[mapAddress] mapAddressFields row')->setHtml(
-
-				Html::el('p')->setClass('col-sm-3')->setHtml(
-					Html::el('span')
-						->setText($this->getOption('map-text-street') ? $this->translate($this->getOption('map-text-street')) : $this->translate('forms.address.street'))
-						. Html::el('span')->setClass($nameContainer . '[mapAddressStreet]')
-				)
-					. Html::el('p')->setClass('col-sm-3')->setHtml(
-						Html::el('span')
-							->setText($this->getOption('map-text-houseNmber') ? $this->translate($this->getOption('map-text-houseNumber')) : $this->translate('forms.address.houseNumber'))
-							. Html::el('span')->setClass($nameContainer . '[mapAddressHouseNumber]')
-					)
-					. Html::el('p')->setClass('col-sm-3')->setHtml(
-						Html::el('span')
-							->setText($this->getOption('map-text-city') ? $this->translate($this->getOption('map-text-city')) : $this->translate('forms.address.city'))
-							. Html::el('span')->setClass($nameContainer . '[mapAddressCity]')
-					)
-					. Html::el('p')->setClass('col-sm-3')->setHtml(
-						Html::el('span')
-							->setText($this->getOption('map-text-postCode') ? $this->translate($this->getOption('map-text-postCode')) : $this->translate('forms.address.postCode'))
-							. Html::el('span')->setClass($nameContainer . '[mapAddressPostCode]')
-					)
-					. Html::el('p')->setClass('col-sm-3')->setHtml(
-						Html::el('button')
-							->setText($this->getOption('use-button-label') ? $this->translate($this->getOption('use-button-label')) : $this->translate('forms.button.use'))
-							->setClass($nameContainer . '[mapAddressUse] mapAddressFields__button')
-					)
-
-			)
-		)*/
-
-			Html::el('div')->setClass('col-sm-6')->setHtml(
-				Html::el('input', [
-					'type' => 'text',
-					'name' => $name . '[mapAddressLat]',
-					'value' => $this->lat,
-					'class' => $nameContainer . '[mapAddressLat] form-control mapPositionInput',
-					'readonly' => true
-				])->setAttribute('data-nette-rules', $rules)
-			)
+		$el = Html::el('div')->setClass('col-sm-6')->setHtml(
+			Html::el('input', [
+				'type' => 'text',
+				'name' => $name . '[mapAddressLat]',
+				'value' => $this->lat,
+				'class' => $nameContainer . '[mapAddressLat] form-control mapPositionInput',
+				'readonly' => true
+			])->setAttribute('data-nette-rules', $rules)
+		)
 
 			. Html::el('div')->setClass('col-sm-6')->setHtml(
 				Html::el('input', [
@@ -170,7 +125,6 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 			)
 
 			. Html::el('div')->setClass('col-sm-12')->setHtml(
-				//Html::el('div')->setClass('whisperer-box properStreet')->setHtml($positionIdElement)
 				Html::el('select', [
 					'name' => $name . '[placeId]',
 					'class' => $nameContainer . '[placeName] form-control mapPositionInput formAddressInput',
@@ -200,6 +154,35 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 							])->setText('Zruš pozici')
 
 					)
+			)
+
+			. Html::el('div')->setClass('col-sm-12')->setHtml(
+				Html::el('div')->setClass($nameContainer . '[mapAddress] mapAddressFields row')->setHtml(
+
+					Html::el('p')->setClass('col-sm-8')->setHtml(
+						Html::el('strong')
+							->setText($this->getOption('map-text-street') ? $this->translate($this->getOption('map-text-street')) : $this->translate('forms.address.street'))
+							. Html::el('span')->setClass($nameContainer . '[mapAddressStreet]')
+					)
+						. Html::el('p')->setClass('col-sm-4')->setHtml(
+							Html::el('strong')
+								->setText($this->getOption('map-text-houseNmber') ? $this->translate($this->getOption('map-text-houseNumber')) : $this->translate('forms.address.houseNumber'))
+								. Html::el('span')->setClass($nameContainer . '[mapAddressHouseNumber]')
+						)
+						. Html::el('p')->setClass('col-sm-8')->setHtml(
+							Html::el('strong')
+								->setText($this->getOption('map-text-city') ? $this->translate($this->getOption('map-text-city')) : $this->translate('forms.address.city'))
+								. Html::el('span')->setClass($nameContainer . '[mapAddressCity]')
+						)
+						. Html::el('p')->setClass('col-sm-4')->setHtml(
+							Html::el('strong')
+								->setText($this->getOption('map-text-postCode') ? $this->translate($this->getOption('map-text-postCode')) : $this->translate('forms.address.postCode'))
+								. Html::el('span')->setClass($nameContainer . '[mapAddressPostCode]')
+						)
+						. Html::el('p')->setClass('col-sm-3')->setHtml(
+							$useButton
+						)
+				)
 			);
 
 
