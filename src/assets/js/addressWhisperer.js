@@ -36,7 +36,7 @@ URBITECH.getReverseDataFromOSM = function (
 			let city =
 				data.address.town || data.address.city || data.address.village;
 
-			if (data.address.road === undefined) {
+			if (data.address.road === undefined || Number.isInteger(parseInt(data.address.road))) {
 				street = "";
 			}
 			if (data.address.house_number === undefined) {
@@ -353,6 +353,11 @@ URBITECH.mapInit = function (el) {
 					document.getElementsByClassName(
 						mainContainer + "[mapAddressLon]"
 					)[0].value = "";
+
+					let removeTextElements = ["[street]", "[houseNumber]", "[city]", "[postCode]"]
+					removeTextElements.forEach(element => {
+						document.getElementsByClassName(linkedContainer + element)[0].value = "";
+					});
 					/*
 					document.getElementsByClassName(
 						mainContainer + "[mapAddressStreet]"
