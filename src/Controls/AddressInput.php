@@ -78,7 +78,6 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 		$name = $this->getHtmlName();
 		$placeholders = $this->getOption('placeholder');
 		$nameContainer = ($this->getOption("controls-id")) ?: $name . '-container';
-		$description = $this->getOption("descr");
 
 		$rules = $this->modifyRulesControl(Helpers::exportRules($this->getRules())) ?: NULL;
 
@@ -118,7 +117,7 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 					'data-block-id' => $nameContainer,
 					'autocomplete' => 'off',
 					'autocomplete' => 'chrome-off',
-				])->setId($this->getHtmlId())->setAttribute('data-nette-rules', $rules)
+				])->setAttribute('data-nette-rules', $rules)
 
 			)
 
@@ -169,7 +168,6 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 
 				)
 			)
-			. Html::el('div')->setClass('col-sm-12')->setHtml(Html::el('span')->setClass('help-block description')->setText($description))
 			. Html::el('div')->setClass('col-sm-12')->setHtml($useButton);
 
 
