@@ -30,7 +30,7 @@
   },
   "minimum-stability": "stable",
   "require": {
-    "php": ">=7.4",
+    "php": ">=7.2",
     "nette/di": "^2.4",
     "nette/forms": "^2.4",
     "urbitech/utils": "^2.4",
