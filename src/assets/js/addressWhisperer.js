@@ -22,76 +22,87 @@ URBITECH.getReverseDataFromOSM = function (
 	mainContainer,
 	linkedContainer
 ) {
-	fetch(
-		"https://nominatim.openstreetmap.org/reverse/?lat=" +
+	if (document.getElementById(linkedContainer)) {
+		fetch(
+			"https://nominatim.openstreetmap.org/reverse/?lat=" +
 			lat +
 			"&lon=" +
 			lon +
 			"&addressdetails=1&limit=50&format=json"
-	)
-		.then((response) => response.json())
-		.then(function (data) {
-			let street = data.address.road;
-			let houseNumber = data.address.house_number;
-			let city =
-				data.address.town || data.address.city || data.address.village;
+		)
+			.then(function (response) {
+				return response.json()
+			})
+			.then(function (data) {
+				let street = data.address.road;
+				let houseNumber = data.address.house_number;
+				let city =
+					data.address.town || data.address.city || data.address.village;
 
-			if (data.address.road === undefined || Number.isInteger(parseInt(data.address.road))) {
-				street = "";
-			}
-			if (data.address.house_number === undefined) {
-				houseNumber = "";
-			}
-			if (
-				data.address.suburb !== undefined &&
-				data.address.suburb !== city
-			) {
-				suburb = " - " + data.address.suburb;
-			} else {
-				suburb = "";
-			}
+				if (data.address.road === undefined || Number.isInteger(parseInt(data.address.road))) {
+					street = "";
+				}
+				if (data.address.house_number === undefined) {
+					houseNumber = "";
+				}
+				if (
+					data.address.suburb !== undefined &&
+					data.address.suburb !== city
+				) {
+					suburb = " - " + data.address.suburb;
+				} else {
+					suburb = "";
+				}
 
-			let autoFillAddress = parseInt(
-				document
-					.getElementById(mainContainer)
-					.getAttribute("data-autofill-address")
-			);
-
-			document.getElementsByClassName(
-				mainContainer + "[mapAddressLat]"
-			)[0].value = data.lat;
-			document.getElementsByClassName(
-				mainContainer + "[mapAddressLon]"
-			)[0].value = data.lon;
-
-			if (autoFillAddress) {
-				URBITECH.autoFillAddress(
-					street,
-					houseNumber,
-					city + suburb,
-					data.address.postcode,
-					mainContainer,
-					linkedContainer
+				let autoFillAddress = parseInt(
+					document
+						.getElementById(mainContainer)
+						.getAttribute("data-autofill-address")
 				);
-			} else {
-				// VLOŽENÍ DAT DO PRVKU PRO JEJICH ZOBRAZENÍ
+
 				document.getElementsByClassName(
-					mainContainer + "[mapAddressStreet]"
-				)[0].innerText = street;
+					mainContainer + "[mapAddressLat]"
+				)[0].value = data.lat;
 				document.getElementsByClassName(
-					mainContainer + "[mapAddressHouseNumber]"
-				)[0].innerText = houseNumber;
-				document.getElementsByClassName(
-					mainContainer + "[mapAddressCity]"
-				)[0].innerText = city + suburb;
-				document.getElementsByClassName(
-					mainContainer + "[mapAddressPostCode]"
-				)[0].innerText = data.address.postcode;
-				document
-					.getElementsByClassName(mainContainer + "[mapAddress]")[0]
-					.classList.add("mapAddressFields--active");
-			}
-		});
+					mainContainer + "[mapAddressLon]"
+				)[0].value = data.lon;
+
+				if (autoFillAddress) {
+					URBITECH.autoFillAddress(
+						street,
+						houseNumber,
+						city + suburb,
+						data.address.postcode,
+						mainContainer,
+						linkedContainer
+					);
+				} else {
+					// VLOŽENÍ DAT DO PRVKU PRO JEJICH ZOBRAZENÍ
+					document.getElementsByClassName(
+						mainContainer + "[mapAddressStreet]"
+					)[0].innerText = street;
+					document.getElementsByClassName(
+						mainContainer + "[mapAddressHouseNumber]"
+					)[0].innerText = houseNumber;
+					document.getElementsByClassName(
+						mainContainer + "[mapAddressCity]"
+					)[0].innerText = city + suburb;
+					document.getElementsByClassName(
+						mainContainer + "[mapAddressPostCode]"
+					)[0].innerText = data.address.postcode;
+					document
+						.getElementsByClassName(mainContainer + "[mapAddress]")[0]
+						.classList.add("mapAddressFields--active");
+				}
+			});
+	} else {
+		document.getElementsByClassName(
+			mainContainer + "[mapAddressLat]"
+		)[0].value = lat;
+		document.getElementsByClassName(
+			mainContainer + "[mapAddressLon]"
+		)[0].value = lon;
+	}
 
 	URBITECH.setProperStreet(lat, lon, mainContainer);
 };
@@ -136,7 +147,9 @@ URBITECH.setProperStreet = function (lat, lon, container) {
 		fetch(
 			fetchUrl + "&" + fetchLat + "=" + lat + "&" + fetchLng + "=" + lon
 		)
-			.then((response) => response.json())
+			.then(function (response) {
+				return response.json()
+			})
 			.then(function (data) {
 				let positionInputElement = document.getElementsByClassName(
 					container + "[placeName]"
@@ -154,7 +167,7 @@ URBITECH.setProperStreet = function (lat, lon, container) {
 					);
 				}
 
-				data.forEach((element) => {
+				data.forEach(function (element) {
 					item = document.createElement("option");
 					item.setAttribute("value", element.id);
 
@@ -206,8 +219,8 @@ URBITECH.setProperStreet = function (lat, lon, container) {
 				} else {
 					positionInputElement.value = "";
 					positionInputElementId.value = "";
-        }
-        */
+		}
+		*/
 			});
 	}
 };
@@ -244,11 +257,26 @@ URBITECH.mapInit = function (el) {
 		URBITECH.setMap = function (lat, lon, zoom, isMarker) {
 			map[mainContainer].setView([lat, lon], zoom);
 
+			let markerDraggable = parseInt(document.getElementById(mainContainer).getAttribute("data-marker-draggable"));
+
 			isMarker
-				? (marker[mainContainer] = L.marker([lat, lon]).addTo(
-						map[mainContainer]
-				  ))
+				? (marker[mainContainer] = L.marker([lat, lon], { "draggable": markerDraggable }).addTo(
+					map[mainContainer]
+				))
 				: false;
+
+			if (isMarker) {
+				document.getElementById(mainContainer + "-markerDestroy").style.display = "block";
+
+				marker[mainContainer].on('dragend', function (event) {
+					URBITECH.getReverseDataFromOSM(
+						event.target.getLatLng().lat,
+						event.target.getLatLng().lng,
+						mainContainer,
+						linkedContainer
+					);
+				});
+			}
 
 			// ZÁKLADNÍ VRSTVA
 			L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -287,17 +315,41 @@ URBITECH.mapInit = function (el) {
 			}
 		}
 
+		let showMapAdressFields = parseInt(
+			document
+				.getElementById(mainContainer)
+				.getAttribute("data-show-address-fields")
+		);
+		if (showMapAdressFields) {
+			document.getElementsByClassName(
+				mainContainer + "[mapAddress]"
+			)[0].classList.add("mapAddressFields--active");
+		}
+
 		// ZJIŠTĚNÍ SOUŘADNIC PO KLIKNUTÍ DO MAPY A ZAVOLÁNÍ QUERY
 		map[mainContainer].on("click", function (ev) {
 			let lat = ev.latlng.lat;
 			let lon = ev.latlng.lng;
 
 			// KDYŽ MAPA NEMÁ MARKER, TAK SE VLOŽÍ, JINAK SE POSUNE
+			let markerDraggable = parseInt(document.getElementById(mainContainer).getAttribute("data-marker-draggable"));
+
 			!map[mainContainer].hasLayer(marker[mainContainer])
-				? (marker[mainContainer] = L.marker([lat, lon]).addTo(
-						map[mainContainer]
-				  ))
+				? (marker[mainContainer] = L.marker([lat, lon], { "draggable": markerDraggable }).addTo(
+					map[mainContainer]
+				))
 				: marker[mainContainer].setLatLng([lat, lon]);
+
+			marker[mainContainer].on('dragend', function (event) {
+				URBITECH.getReverseDataFromOSM(
+					event.target.getLatLng().lat,
+					event.target.getLatLng().lng,
+					mainContainer,
+					linkedContainer
+				);
+			});
+
+			document.getElementById(mainContainer + "-markerDestroy").style.display = "block";
 
 			URBITECH.getReverseDataFromOSM(
 				lat,
@@ -336,17 +388,18 @@ URBITECH.mapInit = function (el) {
 					mainContainer + "[mapAddressPostCode]"
 				)[0].innerText;
 			});
-    */
+	*/
 		// EVENTHANDLER PRO ODSTRANĚNÍ MARKERU Z MAPY PO KLIKU NA TLAČÍTKO
 		let destroyMarkerButton = mainContainer + "-markerDestroy";
 
 		document
 			.getElementById(destroyMarkerButton)
-			.addEventListener("click", (event) => {
+			.addEventListener("click", function (event) {
 				event.preventDefault();
 
 				if (marker[mainContainer] !== undefined) {
 					map[mainContainer].removeLayer(marker[mainContainer]);
+
 					document.getElementsByClassName(
 						mainContainer + "[mapAddressLat]"
 					)[0].value = "";
@@ -355,34 +408,26 @@ URBITECH.mapInit = function (el) {
 					)[0].value = "";
 
 					let removeTextElements = ["[street]", "[houseNumber]", "[city]", "[postCode]"]
-					removeTextElements.forEach(element => {
+					removeTextElements.forEach(function (element) {
 						document.getElementsByClassName(linkedContainer + element)[0].value = "";
 					});
-					/*
+
+					let removeAllElements = ["[mapAddressStreet]", "[mapAddressHouseNumber]", "[mapAddressCity]", "[mapAddressPostCode]", "[placeName]", "[placeId]"];
+					removeAllElements.forEach(function (element) {
+						if (document.getElementsByClassName(mainContainer + element).length) {
+							document.getElementsByClassName(mainContainer + element)[0].innerText = "";
+						}
+					});
+
 					document.getElementsByClassName(
-						mainContainer + "[mapAddressStreet]"
-					)[0].innerText = "";
-					document.getElementsByClassName(
-						mainContainer + "[mapAddressHouseNumber]"
-					)[0].innerText = "";
-					document.getElementsByClassName(
-						mainContainer + "[mapAddressCity]"
-					)[0].innerText = "";
-					document.getElementsByClassName(
-						mainContainer + "[mapAddressPostCode]"
-					)[0].innerText = "";
+						mainContainer + "[mapAddress]"
+					)[0].classList.remove("mapAddressFields--active");
+
 					document.getElementsByClassName(
 						mainContainer + "[placeName]"
-					)[0].value = "";
-					document.getElementsByClassName(
-						mainContainer + "[placeId]"
-					)[0].value = "";
-					document
-          .getElementsByClassName(
-            mainContainer + "[mapAddress]"
-						)[0]
-						.classList.remove("mapAddressFields--active");
-*/
+					)[0].classList.add("mapPositionInput");
+
+					document.getElementById(destroyMarkerButton).style.display = "none";
 				}
 			});
 	}
@@ -484,7 +529,7 @@ URBITECH.getDataFromOSM = function (mainElement) {
 
 				let getIndex = 0;
 
-				data.forEach((element, index) => {
+				data.forEach(function (element, index) {
 					// KDYŽ MÁ VYBRANÝ ELEMENT ČÍSLO DOMU, MĚSTO A PSČ, TAK PŘESUNEME MAPU NA DANÉ MÍSTO
 					if (
 						element.address.house_number &&
@@ -503,12 +548,26 @@ URBITECH.getDataFromOSM = function (mainElement) {
 				if (autoFillPosition) {
 					map[mapContainer].setView([lat, lon], 18); // POSUNEME MAPU
 
-					if (marker[mapContainer] === undefined) {
-						// KDYŽ NENÍ ŽÁDNÝ MARKER NA MAPĚ, TAK JEJ VYTVOŘÍME, JINAK HO POSUNEME¨
+					document.getElementById(mapContainer + "-markerDestroy").style.display = "block";
 
-						marker[mapContainer] = L.marker([lat, lon]).addTo(
+					if (marker[mapContainer] === undefined) {
+						// KDYŽ NENÍ ŽÁDNÝ MARKER NA MAPĚ, TAK JEJ VYTVOŘÍME, JINAK HO POSUNEME
+
+						let markerDraggable = parseInt(document.getElementById(mapContainer).getAttribute("data-marker-draggable"));
+
+						marker[mapContainer] = L.marker([lat, lon], { "draggable": markerDraggable }).addTo(
 							map[mapContainer]
 						);
+
+						marker[mapContainer].on('dragend', function (event) {
+							URBITECH.getReverseDataFromOSM(
+								event.target.getLatLng().lat,
+								event.target.getLatLng().lng,
+								mapContainer,
+								mainElement
+							);
+						});
+
 					} else {
 						marker[mapContainer].setLatLng([lat, lon]);
 					}
@@ -536,17 +595,19 @@ URBITECH.getDataFromOSM = function (mainElement) {
 
 	fetch(
 		"https://nominatim.openstreetmap.org/search/?street=" +
-			streetInput +
-			houseNumberInput +
-			"&city=" +
-			cityInput +
-			"&postalcode=" +
-			zipCodeInput +
-			"&countrycodes=" +
-			country +
-			"&addressdetails=1&limit=50&format=json"
+		streetInput +
+		houseNumberInput +
+		"&city=" +
+		cityInput +
+		"&postalcode=" +
+		zipCodeInput +
+		"&countrycodes=" +
+		country +
+		"&addressdetails=1&limit=50&format=json"
 	)
-		.then((response) => response.json())
+		.then(function (response) {
+			return response.json()
+		})
 		.then(function (data) {
 			// ODSTRANĚNÍ DAT Z NAŠEPTÁVAČŮ Z PŘEDCHOZÍHO FETCHE
 			let clearElements = [whispererListCity, whispererListPostCode]; //SEZNAM NAŠEPTÁVAČŮ
@@ -562,7 +623,7 @@ URBITECH.getDataFromOSM = function (mainElement) {
 			//SKRYTÍ VŠECH AKTIVNÍCH NAŠEPTÁVAČŮ
 			Array.from(
 				document.getElementsByClassName("whispererList")
-			).forEach((element) => {
+			).forEach(function (element) {
 				if (element.classList.contains("whispererList--active")) {
 					element.classList.remove("whispererList--active");
 				}
@@ -570,7 +631,7 @@ URBITECH.getDataFromOSM = function (mainElement) {
 
 			Array.from(
 				document.getElementsByClassName("formAddressInput")
-			).forEach((element) => {
+			).forEach(function (element) {
 				if (element.classList.contains("formAddressInput--active")) {
 					element.classList.remove("formAddressInput--active");
 				}
@@ -602,8 +663,8 @@ URBITECH.getDataFromOSM = function (mainElement) {
 		});
 };
 
-Array.from(document.getElementsByClassName("useButton")).forEach((item) => {
-	item.addEventListener("click", (event) => {
+Array.from(document.getElementsByClassName("useButton")).forEach(function (item) {
+	item.addEventListener("click", function (event) {
 		event.preventDefault();
 
 		if (event.target.classList.contains("useAddress")) {
@@ -647,22 +708,24 @@ URBITECH.setDataToMap = function (item) {
 
 		fetch(
 			"https://nominatim.openstreetmap.org/search/?street=" +
-				streetInput +
-				houseNumberInput +
-				"&city=" +
-				cityInput +
-				"&postalcode=" +
-				zipCodeInput +
-				"&countrycodes=" +
-				country +
-				"&addressdetails=1&limit=50&format=json"
+			streetInput +
+			houseNumberInput +
+			"&city=" +
+			cityInput +
+			"&postalcode=" +
+			zipCodeInput +
+			"&countrycodes=" +
+			country +
+			"&addressdetails=1&limit=50&format=json"
 		)
-			.then((response) => response.json())
+			.then(function (response) {
+				return response.json()
+			})
 			.then(function (data) {
 				if (data.length) {
 					let getIndex = 0;
 
-					data.forEach((element, index) => {
+					data.forEach(function (element, index) {
 						// KDYŽ MÁ VYBRANÝ ELEMENT ČÍSLO DOMU, MĚSTO A PSČ, TAK PŘESUNEME MAPU NA DANÉ MÍSTO
 						if (
 							element.address.house_number &&
@@ -733,7 +796,7 @@ URBITECH.setDataToAddress = function (item) {
 /* ------------ EVENT LISTENER NA INPUT KTERÝ SPOUŠTÍ QUERY NA ADRESU ------------ */
 var timeout = null;
 
-document.addEventListener("input", (event) => {
+document.addEventListener("input", function (event) {
 	clearTimeout(timeout);
 
 	if (event.target.nodeName !== "SELECT") {
@@ -755,7 +818,7 @@ document.addEventListener("click", function (e) {
 
 	// SKRYTÍ VŠECH AKTIVNÍCH NAŠEPTÁVAČŮ
 	Array.from(document.getElementsByClassName("whispererList")).forEach(
-		(element) => {
+		function (element) {
 			if (element.classList.contains("whispererList--active")) {
 				element.classList.remove("whispererList--active");
 			}
@@ -763,7 +826,7 @@ document.addEventListener("click", function (e) {
 	);
 
 	Array.from(document.getElementsByClassName("formAddressInput")).forEach(
-		(element) => {
+		function (element) {
 			if (element.classList.contains("formAddressInput--active")) {
 				element.classList.remove("formAddressInput--active");
 			}
@@ -817,7 +880,7 @@ document.addEventListener("keyup", function (e) {
 
 	// SKRYTÍ VŠECH AKTIVNÍCH NAŠEPTÁVAČŮ
 	Array.from(document.getElementsByClassName("whispererList")).forEach(
-		(element) => {
+		function (element) {
 			if (element.classList.contains("whispererList--active")) {
 				element.classList.remove("whispererList--active");
 			}

@@ -24,7 +24,7 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 	public function __construct($label = NULL)
 	{
 		parent::__construct($label);
-		$this->addCondition(Form::FILLED)
+		$this->setRequired(FALSE)
 			->addRule(__CLASS__ . '::validateAddress', 'forms.address.validAddress');
 	}
 

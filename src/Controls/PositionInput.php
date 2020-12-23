@@ -151,7 +151,7 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 								'class' => 'markerDestroy',
 								'data-map-container' => $nameContainer,
 								'href' => '#'
-							])->setText('Zrušit pozici')
+							])->setText('Zruš pozici')
 
 					)
 			)
@@ -192,22 +192,9 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 			//->setAttribute('data-urbitech-form-position', 'mapPosition')
 			->setAttribute('data-urbitech-form-address', $this->getOption("data-urbitech-form-address"))
 			->setAttribute('data-country', $this->getOption("data-country"))
-			->setAttribute('data-autofill-address', $this->getOption("data-autofill-address") ?: 0);
-	}
-
-
-	public function getLabel($caption = null)
-	{
-		$labelDescription = null;
-		if ($this->getOption("label-description")) {
-			$labelDescription = Html::el('span')->setText(' ' . $this->translate($this->getOption("label-description")));
-		}
-
-		$label = clone $this->label;
-		$label->for = $this->getHtmlId();
-		$label->setText($this->translate($caption === null ? $this->caption : $caption));
-		$label .= $labelDescription;
-		return $label;
+			->setAttribute('data-autofill-address', $this->getOption("data-autofill-address") ?: 0)
+			->setAttribute('data-show-address-fields', $this->getOption("data-show-address-fields") ?: 0)
+			->setAttribute('data-marker-draggable', $this->getOption("data-marker-draggable") ?: 0);
 	}
 
 

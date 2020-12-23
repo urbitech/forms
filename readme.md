@@ -89,6 +89,10 @@ Allow autofill address to form after map click (for positionInput)
 
     ->setOption('data-autofill-address', 1)
 
+Allow draggable mode on map marker
+
+    ->setOption('data-marker-draggable', 1)
+
 ## Other
 
 Less styles requires Bootstrap variables
