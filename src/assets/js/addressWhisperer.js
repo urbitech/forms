@@ -747,7 +747,14 @@ URBITECH.setDataToMap = function (item) {
 					let lon = data[getIndex].lon;
 
 					map[mapElement].setView([lat, lon], 18);
-					marker[mapElement].setLatLng([lat, lon]);
+					if (marker[mapElement] === undefined) {
+						let markerDraggable = parseInt(document.getElementById(mapElement).getAttribute("data-marker-draggable"));
+						marker[mapElement] = L.marker([lat, lon], { "draggable": markerDraggable }).addTo(
+							map[mapElement]
+						)
+					} else {
+						marker[mapElement].setLatLng([lat, lon]);
+					}
 
 					document.getElementsByClassName(
 						mapElement + "[mapAddressLat]"
