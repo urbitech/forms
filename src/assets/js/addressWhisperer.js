@@ -76,7 +76,12 @@ URBITECH.getReverseDataFromOSM = function (
 						mainContainer,
 						linkedContainer
 					);
-				} else {
+				}
+
+				let showMapAdressFields = parseInt(
+					document.getElementById(mainContainer).getAttribute("data-show-address-fields")
+				);
+				if (showMapAdressFields) {
 					// VLOŽENÍ DAT DO PRVKU PRO JEJICH ZOBRAZENÍ
 					document.getElementsByClassName(
 						mainContainer + "[mapAddressStreet]"
