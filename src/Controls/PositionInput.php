@@ -197,6 +197,19 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 			->setAttribute('data-marker-draggable', $this->getOption("data-marker-draggable") ?: 0);
 	}
 
+	public function getLabel($caption = null)
+	{
+		$labelDescription = null;
+		if ($this->getOption("label-description")) {
+			$labelDescription = Html::el('span')->setText(' ' . $this->translate($this->getOption("label-description")));
+		}
+
+		$label = clone $this->label;
+		$label->for = $this->getHtmlId();
+		$label->setText($this->translate($caption === null ? $this->caption : $caption));
+		$label .= $labelDescription;
+		return $label;
+	}
 
 	private function modifyRulesControl($rules)
 	{
