@@ -436,7 +436,7 @@ URBITECH.mapInit = function (el) {
 				}
 			});
 	}
-	URBITECH.setUseButtons();
+	URBITECH.setUseButtons(el);
 };
 
 /* ------------------------------ */
@@ -669,8 +669,14 @@ URBITECH.getDataFromOSM = function (mainElement) {
 		});
 };
 
-URBITECH.setUseButtons = function () {
-	Array.from(document.getElementsByClassName("useButton")).forEach(function (item) {
+URBITECH.setUseButtons = function (el) {
+	let buttonElement = document.getElementsByClassName("useButton");
+
+	if (el) {
+		buttonElement = Object.values(el)[0].getElementsByClassName("useButton");
+	}
+
+	Array.from(buttonElement).forEach(function (item) {
 		item.addEventListener("click", function (event) {
 			event.preventDefault();
 
@@ -684,7 +690,6 @@ URBITECH.setUseButtons = function () {
 		});
 	});
 }
-URBITECH.setUseButtons();
 
 URBITECH.setDataToMap = function (item) {
 	let mainElement = item.getAttribute("data-block-id");
