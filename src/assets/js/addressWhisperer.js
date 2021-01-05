@@ -76,7 +76,12 @@ URBITECH.getReverseDataFromOSM = function (
 						mainContainer,
 						linkedContainer
 					);
-				} else {
+				}
+
+				let showMapAdressFields = parseInt(
+					document.getElementById(mainContainer).getAttribute("data-show-address-fields")
+				);
+				if (showMapAdressFields) {
 					// VLOŽENÍ DAT DO PRVKU PRO JEJICH ZOBRAZENÍ
 					document.getElementsByClassName(
 						mainContainer + "[mapAddressStreet]"
@@ -431,6 +436,7 @@ URBITECH.mapInit = function (el) {
 				}
 			});
 	}
+	URBITECH.setUseButtons(el);
 };
 
 /* ------------------------------ */
@@ -663,19 +669,27 @@ URBITECH.getDataFromOSM = function (mainElement) {
 		});
 };
 
-Array.from(document.getElementsByClassName("useButton")).forEach(function (item) {
-	item.addEventListener("click", function (event) {
-		event.preventDefault();
+URBITECH.setUseButtons = function (el) {
+	let buttonElement = document.getElementsByClassName("useButton");
 
-		if (event.target.classList.contains("useAddress")) {
-			URBITECH.setDataToMap(item);
-		}
+	if (el) {
+		buttonElement = Object.values(el)[0].getElementsByClassName("useButton");
+	}
 
-		if (event.target.classList.contains("usePosition")) {
-			URBITECH.setDataToAddress(item);
-		}
+	Array.from(buttonElement).forEach(function (item) {
+		item.addEventListener("click", function (event) {
+			event.preventDefault();
+
+			if (event.target.classList.contains("useAddress")) {
+				URBITECH.setDataToMap(item);
+			}
+
+			if (event.target.classList.contains("usePosition")) {
+				URBITECH.setDataToAddress(item);
+			}
+		});
 	});
-});
+}
 
 URBITECH.setDataToMap = function (item) {
 	let mainElement = item.getAttribute("data-block-id");
@@ -742,7 +756,14 @@ URBITECH.setDataToMap = function (item) {
 					let lon = data[getIndex].lon;
 
 					map[mapElement].setView([lat, lon], 18);
-					marker[mapElement].setLatLng([lat, lon]);
+					if (marker[mapElement] === undefined) {
+						let markerDraggable = parseInt(document.getElementById(mapElement).getAttribute("data-marker-draggable"));
+						marker[mapElement] = L.marker([lat, lon], { "draggable": markerDraggable }).addTo(
+							map[mapElement]
+						)
+					} else {
+						marker[mapElement].setLatLng([lat, lon]);
+					}
 
 					document.getElementsByClassName(
 						mapElement + "[mapAddressLat]"
