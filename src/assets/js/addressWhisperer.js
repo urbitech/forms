@@ -414,7 +414,9 @@ URBITECH.mapInit = function (el) {
 
 					let removeTextElements = ["[street]", "[houseNumber]", "[city]", "[postCode]"]
 					removeTextElements.forEach(function (element) {
-						document.getElementsByClassName(linkedContainer + element)[0].value = "";
+						if (document.getElementsByClassName(linkedContainer + element).length) {
+							document.getElementsByClassName(linkedContainer + element)[0].value = "";
+						}
 					});
 
 					let removeAllElements = ["[mapAddressStreet]", "[mapAddressHouseNumber]", "[mapAddressCity]", "[mapAddressPostCode]", "[placeName]", "[placeId]"];
