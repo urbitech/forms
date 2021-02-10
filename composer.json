@@ -13,16 +13,6 @@
   "config": {
     "secure-http": false
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "http://git.urbitech.cz:3000/URBITECH/urbitech-forms.git"
-    },
-    {
-      "type": "vcs",
-      "url": "http://git.urbitech.cz:3000/URBITECH/urbitech-utils.git"
-    }
-  ],
   "autoload": {
     "classmap": [
       "src/"

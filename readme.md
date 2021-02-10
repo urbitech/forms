@@ -4,21 +4,6 @@ Components to Nette form Plugins
 
 ## Composer SetUp
 
-Link to sources on Git
-
-```json
-"repositories": [
-      {
-          "type": "vcs",
-          "url": "http://git.urbitech.cz:3000/URBITECH/urbitech-forms.git"
-	},
-      {
-          "type": "vcs",
-          "url": "http://git.urbitech.cz:3000/URBITECH/urbitech-utils.git"
-      }
-],
-```
-
 Configure extension to config.neon
 
     extensions:
