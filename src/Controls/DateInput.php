@@ -16,9 +16,9 @@ class DateInput extends \Nette\Forms\Controls\BaseControl
 {
 	/** @var string */
 	private	$day = '';
-	
+
 	private $month = '';
-	
+
 	private $year = '';
 
 
@@ -79,41 +79,45 @@ class DateInput extends \Nette\Forms\Controls\BaseControl
 	{
 		$name = $this->getHtmlName();
 		$placeholders = $this->getOption('placeholder');
-		
+
 		$promptDay = isset($placeholders[0]) ? ['' => $this->translate($placeholders[0])] : [];
 		$promptMonth = isset($placeholders[1]) ? ['' => $this->translate($placeholders[1])] : [];
-		
-		
+
+
 		//$rules = Helpers::exportRules($this->getRules()) ?: NULL;
 		$rules = $this->modifyRulesControl(Helpers::exportRules($this->getRules())) ?: NULL;
-		
+
 		$input = Html::el('div')->setClass('col-md-4')->setHtml(
 			Helpers::createSelectBox(
 				$promptDay + [1 => 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
-					['selected?' => $this->day])
+				['selected?' => $this->day]
+			)
 				->name($name . '[day]')->setClass('form-control')
-					->setAttribute('data-nette-rules', $rules))
-						->setId($this->getHtmlId())
+				->setAttribute('data-nette-rules', $rules)
+		)
+			->setId($this->getHtmlId())
 
 			. Html::el('div')->setClass('col-md-4')->setHtml(
 				Helpers::createSelectBox(
 					$promptMonth + [1 => 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-						['selected?' => $this->month])
+					['selected?' => $this->month]
+				)
 					->name($name . '[month]')->setClass('form-control')
-						->setAttribute('data-nette-rules', $rules))
+					->setAttribute('data-nette-rules', $rules)
+			)
 
 			. Html::el('div')->setClass('col-md-4')->setHtml(Html::el('input', [
 				'name' => $name . '[year]',
 				'value' => $this->year,
 				'type' => 'number',
-				'min' => 1960,
+				'min' => 1900,
 				'max' => date('Y'),
 				'placeholder' => isset($placeholders[2]) ? $this->translate($placeholders[2]) : NULL,
 				'class' => 'form-control'
 			])->setAttribute('data-nette-rules', $rules));
-		
+
 		return Html::el('div')->setClass('row')
-				->setHtml($input);
+			->setHtml($input);
 	}
 
 
@@ -148,9 +152,8 @@ class DateInput extends \Nette\Forms\Controls\BaseControl
 
 	public static function register()
 	{
-		Container::extensionMethod('addDateInput', function(Container $container, $name, $label = NULL, $callback = NULL) {
+		Container::extensionMethod('addDateInput', function (Container $container, $name, $label = NULL, $callback = NULL) {
 			return $container[$name] = new DateInput($label);
 		});
-	}		
-
+	}
 }
