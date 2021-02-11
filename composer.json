@@ -1,7 +1,7 @@
 {
   "name": "urbitech/forms",
-  "description": "Reusable form coponents",
-  "version": "2.4.7",
+  "description": "Reusable form components",
+  "version": "3.0.1",
   "homepage": "https://urbitech.cz",
   "type": "project",
   "authors": [
@@ -21,9 +21,9 @@
   "minimum-stability": "stable",
   "require": {
     "php": ">=7.2",
-    "nette/di": "^2.4",
-    "nette/forms": "^2.4",
-    "urbitech/utils": "^2.4",
-    "tracy/tracy": "^2.4"
+    "nette/di": "^3.0",
+    "nette/forms": "^3.0",
+    "urbitech/utils": "^3.0",
+    "tracy/tracy": "^2.6"
   }
 }

@@ -12,7 +12,7 @@ Configure extension to config.neon
 Require Components
 
 ```json
-	"urbitech/forms": "^2.4",
+	"urbitech/forms": "^3.0",
 	"frontpack/composer-assets-plugin": "dev-master"
 ```
 

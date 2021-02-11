@@ -116,7 +116,6 @@ class DateInput extends \Nette\Forms\Controls\BaseControl
 				'class' => 'form-control'
 			])->setAttribute('data-nette-rules', $rules));
 
-
 		return Html::el('div')->setClass('row')
 			->setHtml($input);
 	}
