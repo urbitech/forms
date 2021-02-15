@@ -10,9 +10,10 @@
 	position: absolute;
 	z-index: 410;
 	width: 50%;
-	left: 50%;
-	transform: translateX(-50%);
-	top: 10px;
+	left: auto;
+	right: 25px;
+	transform: none;
+	top: 50px;
 }
 
 .mapAddressFields {
@@ -77,4 +78,13 @@
 		background-size: 100%;
 	}
 	*/
+}
+
+@media (min-width: 768px) {
+	[class*="[placeName]"] {
+		left: 50%;
+		transform: translateX(-50%);
+		top: 10px;
+		right: auto;
+	}
 }
