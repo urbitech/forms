@@ -151,7 +151,7 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 								'class' => 'markerDestroy',
 								'data-map-container' => $nameContainer,
 								'href' => '#'
-							])->setText('forms.address.clearPositionData')
+							])])->setText($this->getOption('clear-button-text') ? $this->translate($this->getOption('clear-button-text')) : $this->translate('forms.address.clearPositionData'))
 
 					)
 			)
