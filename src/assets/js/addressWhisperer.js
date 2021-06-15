@@ -182,6 +182,13 @@ URBITECH.setProperStreet = function (lat, lon, container) {
 					positionInputElement.appendChild(item);
 				});
 
+				if (data.length) {
+					window.scrollTo({
+						top: document.getElementById(container).offsetTop + (window.innerHeight / 2) - 30,
+						behavior: 'smooth'
+					});
+				}
+
 				/*
 				let positionInputElement = document.getElementsByClassName(
 					container + "[placeName]"
