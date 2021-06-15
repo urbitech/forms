@@ -192,7 +192,13 @@ URBITECH.setProperStreet = function (lat, lon, container) {
 						top: document.getElementById(container).offsetTop + textOffset - 120,
 						behavior: 'smooth'
 					});
+
+					positionInputElement.classList.add("alert-border");
 				}
+
+				positionInputElement.addEventListener("click", function (event) {
+					positionInputElement.classList.remove("alert-border");
+				});
 
 				/*
 				let positionInputElement = document.getElementsByClassName(
