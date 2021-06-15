@@ -183,8 +183,13 @@ URBITECH.setProperStreet = function (lat, lon, container) {
 				});
 
 				if (data.length) {
+					let textOffset = 350;
+					if (document.getElementsByClassName("row-three").length) {
+						textOffset = document.getElementsByClassName("row-three")[0].offsetTop
+					}
+
 					window.scrollTo({
-						top: document.getElementById(container).offsetTop + (window.innerHeight / 2) - 30,
+						top: document.getElementById(container).offsetTop + textOffset - 120,
 						behavior: 'smooth'
 					});
 				}
