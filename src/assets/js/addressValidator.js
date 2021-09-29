@@ -11,11 +11,13 @@ Nette.validators.URBITECHFormsControlsAddressInput_validateAddress = function (e
 		elemPostCode.value = elemPostCode.value.replace(/\s/g, ''); // ODSTRANÍME PŘÍPADNOU MEZERU V PSČ
 
 		if (elemPostCode.value.length === 5 && parseInt(elemPostCode.value) !== NaN) { // KDYŽ MÁ 5 ZNAKŮ A ZÁROVEŇ JE ČÍSLO
-			return true
-
+			if (elemHouseNumber.value && elemCity.value && elemPostCode.value) { // MUSÍ BÝT VYPLNĚNÉ VŠECHNY TŘI POLOŽKY
+				return true
+			} else {
+				return false
+			}
 		} else {
 			return false
-
 		}
 
 	}
