@@ -10,12 +10,14 @@ Nette.validators.URBITECHFormsControlsAddressInput_validateAddress = function (e
 	if (elemHouseNumber.value || elemCity.value || elemPostCode.value) {
 		elemPostCode.value = elemPostCode.value.replace(/\s/g, ''); // ODSTRANÍME PŘÍPADNOU MEZERU V PSČ
 
-		if (elemPostCode.value.length === 5 && parseInt(elemPostCode.value) !== NaN) { // KDYŽ MÁ 5 ZNAKŮ A ZÁROVEŇ JE ČÍSLO
-			if (elemHouseNumber.value && elemCity.value && elemPostCode.value) { // MUSÍ BÝT VYPLNĚNÉ VŠECHNY TŘI POLOŽKY
-				return true
-			} else {
-				return false
-			}
+		// KDYŽ MÁ 5 ZNAKŮ A ZÁROVEŇ JE ČÍSLO A MUSÍ BÝT VYPLNĚNÉ VŠECHNY TŘI POLOŽKY
+		if (elemPostCode.value.length === 5
+			&& parseInt(elemPostCode.value) !== NaN
+			&& elemHouseNumber.value
+			&& elemCity.value
+			&& elemPostCode.value
+		) {
+			return true
 		} else {
 			return false
 		}
