@@ -1,0 +1,94 @@
+.mapInit {
+	min-height: 400px;
+}
+
+.mapPositionInput {
+	display: none;
+}
+
+[class*="[placeName]"] {
+	position: absolute;
+	z-index: 410;
+	width: 50%;
+	left: auto;
+	right: 25px;
+	transform: none;
+	top: 50px;
+
+	&.alert-border {
+		border-color: #edc01c;
+	}
+}
+
+.mapAddressFields {
+	display: none;
+
+	span,
+	strong {
+		margin-right: 10px;
+	}
+
+	&__button {
+		display: none;
+
+		&--active {
+			display: block;
+		}
+	}
+
+	&--active {
+		display: block;
+	}
+}
+
+.map-box {
+	position: relative;
+}
+
+.markerDestroy {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	z-index: 1029;
+	background: white;
+	/*
+	width: 30px;
+	height: 30px;
+	*/
+	color: black;
+	padding: 2px 10px;
+	border: 2px solid rgba(0, 0, 0, 0.2);
+	border-radius: 4px;
+	//font-size: 0;
+	display: none;
+
+	&:hover {
+		text-decoration: none;
+		background: #f4f4f4;
+		color: black;
+	}
+
+	/*
+	&::before {
+		position: absolute;
+		content: "";
+		display: block;
+		width: 24px;
+		height: 24px;
+		top: 1px;
+		left: 1px;
+		background: url("@{base-path}/assets/urbitech/forms/images/destroy-marker.svg")
+			no-repeat center center;
+		background-size: 100%;
+	}
+	*/
+}
+
+@media (min-width: 768px) {
+	[class*="[placeName]"] {
+		left: 50%;
+		transform: translateX(-50%);
+		top: 10px;
+		right: auto;
+	}
+}

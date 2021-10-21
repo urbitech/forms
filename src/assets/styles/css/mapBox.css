@@ -1,0 +1,62 @@
+.mapInit {
+  min-height: 400px;
+}
+.mapPositionInput {
+  display: none;
+}
+[class*="[placeName]"] {
+  position: absolute;
+  z-index: 410;
+  width: 50%;
+  left: auto;
+  right: 25px;
+  transform: none;
+  top: 50px;
+}
+[class*="[placeName]"].alert-border {
+  border-color: #edc01c;
+}
+.mapAddressFields {
+  display: none;
+}
+.mapAddressFields span,
+.mapAddressFields strong {
+  margin-right: 10px;
+}
+.mapAddressFields__button {
+  display: none;
+}
+.mapAddressFields__button--active {
+  display: block;
+}
+.mapAddressFields--active {
+  display: block;
+}
+.map-box {
+  position: relative;
+}
+.markerDestroy {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 1029;
+  background: white;
+  color: black;
+  padding: 2px 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  display: none;
+}
+.markerDestroy:hover {
+  text-decoration: none;
+  background: #f4f4f4;
+  color: black;
+}
+@media (min-width: 768px) {
+  [class*="[placeName]"] {
+    left: 50%;
+    transform: translateX(-50%);
+    top: 10px;
+    right: auto;
+  }
+}
