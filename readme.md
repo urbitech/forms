@@ -1,5 +1,7 @@
 # URBITECH Forms
 
+Created as npm package as well https://www.npmjs.com/package/urbitech-forms
+
 Components to Nette form Plugins
 
 ## Composer SetUp
