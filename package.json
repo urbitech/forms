@@ -8,5 +8,9 @@
   "main": "src/js/addressWhisperer.js",
   "files": [
     "src/assets"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/urbitech/forms.git"
+  }
 }
