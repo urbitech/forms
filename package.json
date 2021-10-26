@@ -8,5 +8,8 @@
   "main": "src/js/addressWhisperer.js",
   "files": [
     "src/assets"
-  ]
+  ],
+  "dependencies": {
+    "urbitech-forms": "^3.0.8"
+  }
 }
