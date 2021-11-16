@@ -110,6 +110,7 @@
 							.getElementsByClassName(mainContainer + "[mapAddress]")[0]
 							.classList.add("mapAddressFields--active");
 					}
+					URBITECH.setProperStreet(lat, lon, mainContainer, street);
 				});
 		} else {
 			document.getElementsByClassName(
@@ -118,9 +119,8 @@
 			document.getElementsByClassName(
 				mainContainer + "[mapAddressLon]"
 			)[0].value = lon;
+			URBITECH.setProperStreet(lat, lon, mainContainer);
 		}
-
-		URBITECH.setProperStreet(lat, lon, mainContainer);
 	};
 
 	URBITECH.autoFillAddress = function (
@@ -148,7 +148,7 @@
 	};
 
 	/* ------------ FETCH ULIC Z DB PO KLIKU DO MAPY ------------ */
-	URBITECH.setProperStreet = function (lat, lon, container) {
+	URBITECH.setProperStreet = function (lat, lon, container, street = null) {
 		let fetchUrl = document
 			.getElementsByClassName(container + "[placeName]")[0]
 			.getAttribute("data-url");
@@ -183,9 +183,24 @@
 						);
 					}
 
+					// Fuse search
+					var result = []
+					if (window.Fuse) {
+						const options = {
+							includeScore: true,
+							keys: ['name']
+						}
+
+						const fuse = new Fuse(data, options)
+						result = fuse.search(street)
+					}
+
 					data.forEach(function (element) {
 						item = document.createElement("option");
 						item.setAttribute("value", element.id);
+						if (result.length && element === result[0].item) {
+							item.setAttribute("selected", "selected");
+						}
 
 						let text = document.createTextNode(element.name);
 						item.appendChild(text);
@@ -262,11 +277,24 @@
 				});
 			}
 
-			// ZÁKLADNÍ VRSTVA
-			L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+			// VRSTVY DLAŽDIC
+			let showLayers = JSON.parse(document.getElementById(mainContainer + "-map").getAttribute("data-map-options"));
+			googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+				maxZoom: 20,
+				subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+			});
+			googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+				maxZoom: 20,
+				subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+			});
+			original = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 				attribution:
 					'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 			}).addTo(map[mainContainer]);
+			if (showLayers?.showMapLayers) {
+				L.control.layers(null, { "Základní": original, "Google - Satelitní": googleSat, "Google - Klasická": googleStreets }, { position: 'bottomright' }).addTo(map[mainContainer])
+			}
+
 		};
 
 		if (lat !== "" && lon !== "") {
@@ -626,7 +654,6 @@
 
 		if (buttonElement) {
 			Array.from(buttonElement).forEach(function (item) {
-				console.log(item)
 				item.addEventListener("click", function (event) {
 					event.preventDefault();
 
