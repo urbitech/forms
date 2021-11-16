@@ -29,6 +29,8 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 
 	const SEARCH_ZOOM = 18; // MAX 18
 
+	const SHOW_MAP_LAYERS = false;
+
 
 	public function __construct($label = NULL)
 	{
@@ -81,7 +83,6 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 
 	public function getControl()
 	{
-
 		$name = $this->getHtmlName();
 		$nameContainer = ($this->getOption("controls-id")) ?: $name . '-container';
 
@@ -144,6 +145,7 @@ class PositionInput extends \Nette\Forms\Controls\BaseControl
 								'lon' => $this->getOption('map-lon') ?: self::DEFAULT_LNG,
 								'zoom' => $this->getOption('map-zoom') ?: self::DEFAULT_ZOOM,
 								'searchZoom' => $this->getOption('map-searchZoom') ?: self::SEARCH_ZOOM,
+								'showMapLayers' => $this->getOption('map-showMapLayers') ?: self::SHOW_MAP_LAYERS,
 							])
 						])
 							. Html::el('a', [
