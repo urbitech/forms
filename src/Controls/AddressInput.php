@@ -53,7 +53,7 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 	public function getValue()
 	{
 		return self::validateAddress($this)
-			? new Address($this->street, $this->houseNumber, $this->city, $this->postCode)
+			? new Address($this->street, $this->city, $this->houseNumber, $this->postCode)
 			: NULL;
 	}
 

@@ -1,6 +1,6 @@
 {
   "name": "urbitech-forms",
-  "version": "3.0.10",
+  "version": "3.1.0",
   "description": "Urbitech Form component",
   "homepage": "https://urbitech.cz",
   "author": "Urbitech s.r.o. (https://urbitech.cz)",
@@ -10,6 +10,6 @@
     "src/assets"
   ],
   "dependencies": {
-    "urbitech-forms": "^3.0.10"
+    "urbitech-forms": "^3.1.0"
   }
 }
