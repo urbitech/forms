@@ -292,7 +292,7 @@
 					'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 			}).addTo(map[mainContainer]);
 			if (showLayers?.showMapLayers) {
-				L.control.layers(null, { "Základní": original, "Google - Satelitní": googleSat, "Google - Klasická": googleStreets }, { position: 'bottomright' }).addTo(map[mainContainer])
+				L.control.layers({ "Základní": original, "Google - Satelitní": googleSat, "Google - Klasická": googleStreets }, null, { position: 'bottomright' }).addTo(map[mainContainer])
 			}
 
 		};
