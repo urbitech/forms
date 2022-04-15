@@ -185,7 +185,7 @@
 
 					// Fuse search
 					var result = []
-					if (window.Fuse) {
+					if (window.Fuse && street) {
 						const options = {
 							includeScore: true,
 							keys: ['name']
