@@ -6,6 +6,16 @@ Nette.validators.URBITECHFormsControlsDateInput_validateDate = function (
 	let day = parseInt(document.querySelector("[name*=day]").value);
 	let month = parseInt(document.querySelector("[name*=month]").value);
 	let year = parseInt(document.querySelector("[name*=year]").value);
+	let yearMin = parseInt(document.querySelector("[name*=year]").min);
+	let yearMax = parseInt(document.querySelector("[name*=year]").max);
+
+  	if (!isNaN(yearMin) && year < yearMin) {
+		return false;
+  	}
+
+  	if (!isNaN(yearMax) && year > yearMax) {
+    	return false;
+  	}
 
 	let listofDays = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 	var parseDate = Date.parse(year + "-" + month + "-" + day);
