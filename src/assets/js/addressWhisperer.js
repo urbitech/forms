@@ -340,7 +340,7 @@
 			// KDYŽ MAPA NEMÁ MARKER, TAK SE VLOŽÍ, JINAK SE POSUNE
 			let markerDraggable = parseInt(document.getElementById(mainContainer).getAttribute("data-marker-draggable"));
 
-			if (map[mainContainer] === undefined) {
+			if (marker[mainContainer] === undefined) {
 				marker[mainContainer] = L.marker([lat, lon], { "draggable": markerDraggable }).addTo(
 					map[mainContainer]
 				)
