@@ -20,12 +20,20 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 
 	private $postCode = '';
 
+	/** Disable address validation */
+	private $addressValidation = true;
 
-	public function __construct($label = NULL)
+
+	public function __construct($label = NULL, $addressValidation = true)
 	{
 		parent::__construct($label);
-		$this->setRequired(FALSE)
-			->addRule(__CLASS__ . '::validateAddress', 'forms.address.validAddress');
+
+		$this->addressValidation = $addressValidation;
+
+		if ($addressValidation) {
+			$this->setRequired(FALSE)
+				->addRule(__CLASS__ . '::validateAddress', 'forms.address.validAddress');
+		}
 	}
 
 
@@ -52,7 +60,7 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 	 */
 	public function getValue()
 	{
-		return self::validateAddress($this)
+		return self::validateAddress($this) || !$this->addressValidation
 			? new Address($this->street, $this->city, $this->houseNumber, $this->postCode)
 			: NULL;
 	}
@@ -211,8 +219,8 @@ class AddressInput extends \Nette\Forms\Controls\BaseControl
 
 	public static function register()
 	{
-		Container::extensionMethod('addAddressInput', function (Container $container, $name, $label = NULL, $callback = NULL) {
-			return $container[$name] = new AddressInput($label);
+		Container::extensionMethod('addAddressInput', function (Container $container, $name, $label = NULL, $addressValidation = true) {
+			return $container[$name] = new AddressInput($label, $addressValidation);
 		});
 	}
 }
