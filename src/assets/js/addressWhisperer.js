@@ -71,13 +71,6 @@
 							.getAttribute("data-autofill-address")
 					);
 
-					document.getElementsByClassName(
-						mainContainer + "[mapAddressLat]"
-					)[0].value = data.lat;
-					document.getElementsByClassName(
-						mainContainer + "[mapAddressLon]"
-					)[0].value = data.lon;
-
 					if (autoFillAddress) {
 						URBITECH.autoFillAddress(
 							street,
@@ -112,15 +105,16 @@
 					}
 					URBITECH.setProperStreet(lat, lon, mainContainer, street);
 				});
-		} else {
-			document.getElementsByClassName(
-				mainContainer + "[mapAddressLat]"
-			)[0].value = lat;
-			document.getElementsByClassName(
-				mainContainer + "[mapAddressLon]"
-			)[0].value = lon;
-			URBITECH.setProperStreet(lat, lon, mainContainer);
 		}
+
+		document.getElementsByClassName(
+			mainContainer + "[mapAddressLat]"
+		)[0].value = lat;
+		document.getElementsByClassName(
+			mainContainer + "[mapAddressLon]"
+		)[0].value = lon;
+		URBITECH.setProperStreet(lat, lon, mainContainer);
+		
 	};
 
 	URBITECH.autoFillAddress = function (
@@ -346,20 +340,22 @@
 			// KDYŽ MAPA NEMÁ MARKER, TAK SE VLOŽÍ, JINAK SE POSUNE
 			let markerDraggable = parseInt(document.getElementById(mainContainer).getAttribute("data-marker-draggable"));
 
-			!map[mainContainer].hasLayer(marker[mainContainer])
-				? (marker[mainContainer] = L.marker([lat, lon], { "draggable": markerDraggable }).addTo(
+			if (!map[mainContainer].hasLayer(marker[mainContainer])) {
+				marker[mainContainer] = L.marker([lat, lon], { "draggable": markerDraggable }).addTo(
 					map[mainContainer]
-				))
-				: marker[mainContainer].setLatLng([lat, lon]);
+				)
 
-			marker[mainContainer].on('dragend', function (event) {
-				URBITECH.getReverseDataFromOSM(
-					event.target.getLatLng().lat,
-					event.target.getLatLng().lng,
-					mainContainer,
-					linkedContainer
-				);
-			});
+				marker[mainContainer].on('dragend', function (event) {
+					URBITECH.getReverseDataFromOSM(
+						event.target.getLatLng().lat,
+						event.target.getLatLng().lng,
+						mainContainer,
+						linkedContainer
+					);
+				});
+			} else {
+				marker[mainContainer].setLatLng([lat, lon]);
+			}
 
 			document.getElementById(mainContainer + "-markerDestroy").style.display = "block";
 
