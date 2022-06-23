@@ -14,7 +14,7 @@ Nette.validators.URBITECHFormsControlsDateInput_validateDate = function (
   	}
 
   	if (!isNaN(yearMax) && year > yearMax) {
-    	return false;
+		return false;
   	}
 
 	let listofDays = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
