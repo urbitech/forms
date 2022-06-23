@@ -105,6 +105,8 @@
 					}
 					URBITECH.setProperStreet(lat, lon, mainContainer, street);
 				});
+		} else {
+			URBITECH.setProperStreet(lat, lon, mainContainer);
 		}
 
 		document.getElementsByClassName(
@@ -113,7 +115,6 @@
 		document.getElementsByClassName(
 			mainContainer + "[mapAddressLon]"
 		)[0].value = lon;
-		URBITECH.setProperStreet(lat, lon, mainContainer);
 		
 	};
 
