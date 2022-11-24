@@ -18,7 +18,7 @@ Nette.validators.URBITECHFormsControlsDateInput_validateDate = function (
   	}
 
 	let listofDays = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-	var parseDate = Date.parse(year + "-" + month + "-" + day);
+	var parseDate = Date.parse(year + "/" + month + "/" + day);
 
 	if (day <= listofDays[month - 1] && !isNaN(parseDate)) {
 		if (month === 2) {
