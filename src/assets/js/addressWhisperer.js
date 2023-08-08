@@ -36,7 +36,7 @@
 	) {
 		if (document.getElementById(linkedContainer)) {
 			fetch(
-				"https://nominatim.openstreetmap.org/reverse/?lat=" +
+				"https://nominatim.openstreetmap.org/reverse?lat=" +
 				lat +
 				"&lon=" +
 				lon +
@@ -577,7 +577,7 @@
 		)[0];
 
 		fetch(
-			"https://nominatim.openstreetmap.org/search/?street=" +
+			"https://nominatim.openstreetmap.org/search?street=" +
 			streetInput +
 			houseNumberInput +
 			"&city=" +
@@ -696,7 +696,7 @@
 			}
 
 			fetch(
-				"https://nominatim.openstreetmap.org/search/?street=" +
+				"https://nominatim.openstreetmap.org/search?street=" +
 				streetInput +
 				houseNumberInput +
 				"&city=" +
