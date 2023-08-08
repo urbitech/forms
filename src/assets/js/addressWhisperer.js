@@ -24,7 +24,7 @@ URBITECH.getReverseDataFromOSM = function (
 ) {
 	if (document.getElementById(linkedContainer)) {
 		fetch(
-			"https://nominatim.openstreetmap.org/reverse/?lat=" +
+			"https://nominatim.openstreetmap.org/reverse?lat=" +
 			lat +
 			"&lon=" +
 			lon +
@@ -620,7 +620,7 @@ URBITECH.getDataFromOSM = function (mainElement) {
 	)[0];
 
 	fetch(
-		"https://nominatim.openstreetmap.org/search/?street=" +
+		"https://nominatim.openstreetmap.org/search?street=" +
 		streetInput +
 		houseNumberInput +
 		"&city=" +
@@ -741,7 +741,7 @@ URBITECH.setDataToMap = function (item) {
 		}
 
 		fetch(
-			"https://nominatim.openstreetmap.org/search/?street=" +
+			"https://nominatim.openstreetmap.org/search?street=" +
 			streetInput +
 			houseNumberInput +
 			"&city=" +
