@@ -27,6 +27,16 @@
 	let basicLon = 15.4749544;
 	let zoom = 7;
 
+	URBITECH.getMaps = function () {
+		return map;
+	};
+
+	URBITECH.invalidateSizes = function () {
+		 map.map(function (map) {
+			return map.invalidateSize();
+		});
+	};
+
 	/* ------------ FETCH PO KLIKU DO MAPY ------------ */
 	URBITECH.getReverseDataFromOSM = function (
 		lat,
