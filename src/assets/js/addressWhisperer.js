@@ -27,14 +27,12 @@
 	let basicLon = 15.4749544;
 	let zoom = 7;
 
+	/**
+	 * Vrací pole (spíše objekt v tomto kontextu, ale je to array) map
+	 * @returns {Array} - Vrací pole s mapami indexované stringy idcek kontejnerů
+	 */
 	URBITECH.getMaps = function () {
 		return map;
-	};
-
-	URBITECH.invalidateSizes = function () {
-		 map.map(function (map) {
-			return map.invalidateSize();
-		});
 	};
 
 	/* ------------ FETCH PO KLIKU DO MAPY ------------ */
